@@ -1,0 +1,10 @@
+还款说明
+1. 字段确认（还款流程）
+	hkje 	还款金额
+	hxjkdh	借款单号（浏览按钮）借款流程id
+2. 配置文件
+	RCGSBX.properties	配置文件名称
+	RCGSBX_FYJK			费用借款屋里表（formtable_main_xxx）
+3. 字段确认（借款流程）
+	hkztje	还款在途金额
+	ljhkje	累计还款金额
