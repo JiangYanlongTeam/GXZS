@@ -16,6 +16,7 @@ import net.jsgx.www.E1D.service.SI_1049_ALL2ERP_ZJZFSQ_OUTProxy;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
+import weaver.hrm.resource.ResourceComInfo;
 import weaver.interfaces.gx.jyl.cw.base.CWPublicMethod;
 import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreateModel;
 import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreate_HeadModel;
@@ -60,12 +61,23 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 		String fklx_value = Util.null2String(mainDataMap.get("fklx"));
 		// 申请日期-值
 		String sqrq_value = Util.null2String(mainDataMap.get("sqrq"));
+		if (!"".equals(sqrq_value)) {
+			sqrq_value = sqrq_value.replaceAll("-", "");
+		}
 		// 经办人-值
 		String jbr_value = Util.null2String(mainDataMap.get("sqr"));
+		try {
+			jbr_value = new ResourceComInfo().getLastname(jbr_value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// 货币码-值
 		String hbm_value = Util.null2String(mainDataMap.get("hbm"));
 		// 付款日期-值
 		String fkrq_value = Util.null2String(mainDataMap.get("jhfkrq"));
+		if (!"".equals(fkrq_value)) {
+			fkrq_value = fkrq_value.replaceAll("-", "");
+		}
 		// 资金预算码-值
 		String zjysm_value = Util.null2String(mainDataMap.get("zjysm"));
 		// 摘要-值

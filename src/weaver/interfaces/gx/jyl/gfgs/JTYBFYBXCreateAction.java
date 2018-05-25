@@ -36,7 +36,7 @@ public class JTYBFYBXCreateAction extends BaseBean implements Action {
 		String requestid = request.getRequestid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("股份公司-一般费用报销退回操作，不执行接口.");
+			new BaseBean().writeLog("股份公司-一般费用报销退回操作，不执行接口.");
 			return SUCCESS;
 		}
 		// 凭证抬头文本-值
@@ -103,7 +103,7 @@ public class JTYBFYBXCreateAction extends BaseBean implements Action {
 		String gsxm_column = "gsxm";
 		// 费用审批类别
 		String fylx_value = "";
-		String fylx_column = "fylx";
+		String fylx_column = "fylb";
 		// 制单人-值
 		String pzzdr_value = "";
 		// 制单人-字段
