@@ -18,8 +18,8 @@ import weaver.general.BaseBean;
 import weaver.general.Util;
 import weaver.hrm.resource.ResourceComInfo;
 import weaver.interfaces.gx.jyl.cw.base.CWPublicMethod;
-import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreateModel;
-import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreate_HeadModel;
+import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFGDZCCreateModel;
+import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFGFZCCreate_HeadModel;
 import weaver.interfaces.gx.jyl.util.ECUtil;
 import weaver.interfaces.gx.jyl.util.XMLUtil;
 import weaver.interfaces.workflow.action.Action;
@@ -38,7 +38,7 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 		int formid = request.getRequestManager().getFormid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("股份公司-固定资产生成资金支付单退回操作，不执行接口.");
+			new BaseBean().writeLog("股份公司-固定资产生成资金支付单退回操作，不执行接口.");
 			return SUCCESS;
 		}
 
@@ -116,16 +116,19 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 			String zhz_value = Util.null2String(map.get("gyszhz")); // TODO 明细表1
 			String gysmc_value = Util.null2String(map.get("gysmc")); // TODO 明细表1
 			String cbzx_value = Util.null2String(map.get("kostl")); // TODO 明细表1
+			String skfhm_value = Util.null2String(map.get("skfhm")); // TODO 明细表1
 			Double NETWR_value = Double.parseDouble(Util.null2o(map.get("netwr")));
+			String EBELN_val = Util.null2String(map.get("ebeln"));
 
 			GYSINFO info = new GYSINFO();
-			info.setGysmc_value(gysmc_value);
+			info.setGysmc_value(skfhm_value);
 			info.setGyskhh_value(gyskhh_value);
 			info.setGyskhzh_value(gyskhzh_value);
 			info.setZhz_value(zhz_value);
 			info.setGysbm_value(gysbm_value);
 			info.setCbzx_value(cbzx_value);
 			info.setNETWR_value(NETWR_value);
+			info.setEbeln_value(EBELN_val);
 
 			if (gysMap.containsKey(gysbm_value)) {
 				GYSINFO in = gysMap.get(gysbm_value);
@@ -145,7 +148,7 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 			String gysmc_value = gysinfo.getGysmc_value();
 			Double cx = gysinfo.getNETWR_value();
 			String zhz_value = gysinfo.getZhz_value();
-
+			String ebeln_value = gysinfo.getEbeln_value();
 			String xmlstring = "";
 			String qt = "";
 			if ("GX10".equals(zhz_value) || "GX11".equals(zhz_value)) {
@@ -154,15 +157,15 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 				qt = qtyfkjtwb_value;
 			}
 
-			List<JTCLFBXZJZFCreate_HeadModel> hEAD = new ArrayList<JTCLFBXZJZFCreate_HeadModel>();
-			JTCLFBXZJZFCreate_HeadModel model = new JTCLFBXZJZFCreate_HeadModel(djlx_value, gsdm_value, cn_value,
-					kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value, qt, sqrq_value,
+			List<JTCLFBXZJZFGFZCCreate_HeadModel> hEAD = new ArrayList<JTCLFBXZJZFGFZCCreate_HeadModel>();
+			JTCLFBXZJZFGFZCCreate_HeadModel model = new JTCLFBXZJZFGFZCCreate_HeadModel(djlx_value, gsdm_value, cn_value,
+					kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value,ebeln_value, qt, sqrq_value,
 					jbr_value, df.format(cx), hbm_value, fkrq_value, "T", gysmc_value, gyskhh_value, gyskhzh_value,
-					zjysm_value, "(付款)" + zy_value, fjzs_value, fkflhh_value, fkfyhzh_value);
+					zjysm_value, "(付款)" + zy_value, fjzs_value, fkfyhzh_value, fkflhh_value);
 			hEAD.add(model);
-			JTCLFBXZJZFCreateModel head = new JTCLFBXZJZFCreateModel(hEAD);
+			JTCLFBXZJZFGDZCCreateModel head = new JTCLFBXZJZFGDZCCreateModel(hEAD);
 			try {
-				xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFCreateModel.class);
+				xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFGFZCCreate_HeadModel.class);
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}

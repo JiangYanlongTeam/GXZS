@@ -22,7 +22,7 @@ public class ConvertMergePDF extends BaseBean{
 
     public String wsdlurl = "http://10.254.45.5:8088/convert/webservice/ConvertService";
     public String furl = "http://10.254.45.5:8088";
-    public String strDestFolder = "D:\\ConvertService\\";
+    public String strDestFolder = "D:\\Tomcat-7-ConvertService\\webapps\\convert\\OAdest\\";
     public String strTellResultWebservice = "http://10.254.45.3:8080/services/ReportResultPDF?wsdl";
     private ConvertServiceProxy proxy = null;
 

@@ -26,7 +26,7 @@ public class GYSCheckoutAction extends BaseBean implements Action {
     	String requestid = request.getRequestid();
         String src = request.getRequestManager().getSrc();
         if(!"submit".equals(src)){
-            new weaver.general.BaseBean().writeLog("供应商退回操作，不执行接口.");
+            new BaseBean().writeLog("供应商退回操作，不执行接口.");
             return SUCCESS;
         }
         //供应商简称-值
@@ -55,6 +55,12 @@ public class GYSCheckoutAction extends BaseBean implements Action {
         //贸易伙伴
         String myhb_value = "";
         String myhb_column = "myhb";
+        //电话分机号
+		String dhfjh_column = "dhfjh";
+		String dhfjh_value = "";
+		//传真分机号
+		String czfjh_column = "czfjh";
+		String czfjh_value = "";
         
         Property[] properties = request.getMainTableInfo().getProperty();// 获取表单主字段信息
         for (int i = 0; i < properties.length; i++) {
@@ -81,6 +87,12 @@ public class GYSCheckoutAction extends BaseBean implements Action {
             if (name.equals(myhb_column)) {
             	myhb_value = value;
             }
+			if (name.equals(dhfjh_column)) {
+				dhfjh_value = value;
+			}
+			if (name.equals(czfjh_column)) {
+				czfjh_value = value;
+			}
         }
         
         writeLog("供应商简称："+gysjc_value);
@@ -90,6 +102,8 @@ public class GYSCheckoutAction extends BaseBean implements Action {
         writeLog("全国组织机构代码："+qgzzjgdm_value);
         writeLog("账户组："+zhz_value);
         writeLog("贸易伙伴："+myhb_value);
+		writeLog("电话分机号："+dhfjh_value);
+		writeLog("传真分机号："+czfjh_value);
         
         if(zhz_value.equals("GX10") || zhz_value.equals("GX11")) {
         	if("".equals(myhb_value)) {
@@ -178,7 +192,16 @@ public class GYSCheckoutAction extends BaseBean implements Action {
 			    e.printStackTrace();
 			}
 		}
-		
+
+		if(!"".equals(dhfjh_value) && dhfjh_value.trim().length() != 10) {
+			PublicMethods.setFailedMessage(request, "failed", "电话分机号："+dhfjh_value+" 应该为10位。");
+			return SUCCESS;
+		}
+		if(!"".equals(czfjh_value) && czfjh_value.trim().length() != 10) {
+			PublicMethods.setFailedMessage(request, "failed", "传真分机号："+czfjh_value+" 应该为10位。");
+			return SUCCESS;
+		}
+
 		String sfkq = getPropValue("MDMCheckout", "MDM_GYS_SFKQ");
 		if("0".equals(sfkq)) {
 			String tablename = getFormTable(workflowid);

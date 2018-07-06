@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <style>
+        .select2_select {
+            width:300px;
+        }
+        div {
+            width:100%;
+            margin:0 auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <select class="select2_select">
+        <option value="1">哈哈</option>
+        <option value="2">呵呵</option>
+        <option value="3">嘿嘿</option>
+    </select>
+</div>
+</body>
+<script>
+    function formatState (state) {
+        if (!state.id) {
+            return state.text;
+        }
+        var baseUrl = "/user/pages/images/flags";
+        var $state = $(
+            '<span>' + state.text + '</span>'
+        );
+        jQuery(".select2_select").val(state.id);
+        return $state;
+    };
+
+    $(".select2_select").select2({
+        templateSelection: formatState
+    });
+</script>
+</html>

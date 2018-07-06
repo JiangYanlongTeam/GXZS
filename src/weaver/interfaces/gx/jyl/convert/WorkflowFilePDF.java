@@ -2905,7 +2905,7 @@ public class WorkflowFilePDF extends BaseBean{
             FtpPDF ts = new FtpPDF();
             //FtpCEBX ts=new FtpCEBX(); //从合并服务器取回文件
 //            ts.myget(filename,filenamepath);
-            ts.downloadFtpFile("D:\\ConvertService\\",filenamepath,filename);
+            ts.downloadFtpFile("D:\\Tomcat-7-ConvertService\\webapps\\convert\\OAdest\\",filenamepath,filename);
 
             String hz = "";
             if(filename.indexOf(".")>0){

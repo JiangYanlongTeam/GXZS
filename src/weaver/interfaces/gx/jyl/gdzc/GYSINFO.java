@@ -9,6 +9,16 @@ public class GYSINFO {
 	private String gysbm_value;
 	private String cbzx_value;
 	private Double NETWR_value;
+	private String ebeln_value;
+
+	public String getEbeln_value() {
+		return ebeln_value;
+	}
+
+	public void setEbeln_value(String ebeln_value) {
+		this.ebeln_value = ebeln_value;
+	}
+
 	public String getGysmc_value() {
 		return gysmc_value;
 	}

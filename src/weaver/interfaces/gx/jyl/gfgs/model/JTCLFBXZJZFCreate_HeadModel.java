@@ -3,7 +3,7 @@ package weaver.interfaces.gx.jyl.gfgs.model;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(propOrder = { "ZDJLX", "BUKRS", "GJAHR", "MONAT", "KOSTL", "ZJPZH_ZY", "APPLYNO_EX", "ZFKLX", "LIFNR", "ABWHK", "BRPDT",
+@XmlType(propOrder = { "ZDJLX", "BUKRS", "GJAHR", "MONAT", "KOSTL", "ZJPZH_ZY", "APPLYNO_EX", "ZFKLX", "LIFNR","ABWHK", "BRPDT",
 		"ZJBR", "SQJE_HSB", "WAERS", "PAY_DATE", "TR_TYPE", "RECE_ACC_NAME", "RECE_CNAPS", "RECE_ACC_NO", "BUDG_CODE",
 		"ABSTRACT","NUMPG","PAYER_CNAPS","PAYBANK_NO" })
 
@@ -14,7 +14,7 @@ public class JTCLFBXZJZFCreate_HeadModel {
 	}
 
 	public JTCLFBXZJZFCreate_HeadModel(String zDJLX, String bUKRS, String gJAHR, String mONAT, String kOSTL,
-			String zJPZH_ZY, String aPPLYNO_EX, String zFKLX, String lIFNR, String aBWHK ,String bRPDT, String zJBR, String sQJE_HSB,
+			String zJPZH_ZY, String aPPLYNO_EX, String zFKLX, String lIFNR,String aBWHK ,String bRPDT, String zJBR, String sQJE_HSB,
 			String wAERS, String pAY_DATE, String tR_TYPE, String rECE_ACC_NAME, String rECE_CNAPS, String rECE_ACC_NO,
 			String bUDG_CODE, String aBSTRACT, String nUMPG, String pAYER_CNAPS, String pAYBANK_NO) {
 		super();
@@ -42,7 +42,6 @@ public class JTCLFBXZJZFCreate_HeadModel {
 		ABSTRACT = aBSTRACT;
 		NUMPG = nUMPG;
 		ABWHK = aBWHK;
-		
 	}
 
 	private String ZDJLX;
@@ -69,8 +68,7 @@ public class JTCLFBXZJZFCreate_HeadModel {
 	private String ABWHK;
 	private String PAYER_CNAPS;
 	private String PAYBANK_NO;
-	
-	
+
 	@XmlElement(name = "PAYER_CNAPS")
 	public String getPAYER_CNAPS() {
 		return PAYER_CNAPS;

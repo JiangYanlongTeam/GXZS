@@ -172,8 +172,10 @@ public class FileConvertMergePDF extends BaseBean implements Action{
 			
 			String jobid = wkFile.ConcatFiles_JobID(srcurlTrueName, 2, wjsize);
 			if(Util.getIntValue(jobid, 0)>0){
+				
 				boolean ff = workflowFile.UpdateCebjobresult(requestid, Util.getIntValue(jobid), wfileCMInfo.getId(),wfileCMInfo.getQfieldname(),fileCMInfo.getFormid(),userid);
 				if(!ff){
+					
 					request.getRequestManager().setMessageid("11111111");
 					request.getRequestManager().setMessagecontent("文件合并任务提交失败1");
 					return Action.SUCCESS;

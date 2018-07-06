@@ -7,7 +7,6 @@ import org.dom4j.Element;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
-import weaver.system.ceb.workflowFile;
 
 import java.util.List;
 
@@ -87,11 +86,11 @@ public class ReportResultPDFImp implements ReportResultPDF {
 					WorkflowFilePDF file = new WorkflowFilePDF();
 					file.CEBXJobResultMerge(jobResult, requestid, wsid, qfieldname, formid, userid);
 				}
-				if(Util.getIntValue(jobstatus,0)==1){
-					//更新流程签批文件信息
-					workflowFile file = new workflowFile();
-					file.JobResultMerge(jobResult, requestid, wsid, qfieldname, formid, userid);
-				}
+//				if(Util.getIntValue(jobstatus,0)==1){
+//					//更新流程签批文件信息
+//					workflowFile file = new workflowFile();
+//					file.JobResultMerge(jobResult, requestid, wsid, qfieldname, formid, userid);
+//				}
 			}else if(type==2){
 
 			}

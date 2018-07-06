@@ -75,7 +75,6 @@ public class FtpPDF {
             File localFile = new File(localPath + File.separatorChar + fileName);
             OutputStream os = new FileOutputStream(localFile);
             ftpClient.retrieveFile(fileName, os);
-            os.flush();
             os.close();
             ftpClient.logout();
 
@@ -90,12 +89,7 @@ public class FtpPDF {
             System.out.println("文件读取错误。");
             e.printStackTrace();
         }
-    }
 
-    public static void main(String[] args) {
-        FtpPDF pdf =new FtpPDF();
-        pdf.downloadFtpFile("D:\\ConvertService\\temp\\2018-05-30\\1668\\","/Users/wangshanshan/Desktop/","4aa45a44-4bd1-44a9-ba38-155ac4501f60.pdf");
-//        pdf.downloadFtpFile("D:\\ConvertService\\","/Users/wangshanshan/Desktop/","tempd5c6225c-ab8b-4f09-90f6-0995f31f77cb.pdf");
     }
 
     /**
