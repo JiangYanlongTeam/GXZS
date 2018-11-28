@@ -9,33 +9,17 @@
 </body>
 <script language="javascript" src="ceb.js"></script>
 <script>
-    function gz(){
-        // 本地文件存储目录
-        var localPath = "C:\\\\test\\\\";
-        var localNameCEB = LocalPath + "a1912dab-a024-4619-86bc-113fa06cc129.pdf";
-
-        // 服务器文件存储路径
-        var pdfFilePath = "http://10.254.45.5:8088/convert/OAdest/a1912dab-a024-4619-86bc-113fa06cc129.pdf";
-
-        // 下载
-        Test_HTTPDownloadFile(localNameCEB,encodeURI(cebxurls));
-
-        //签章
-        var visvalue = visualstampclient(localNameCEB);
-
-        if(visvalue=='0'){
-            if(confirm("是否继续盖章?")){
-                visvalue = visualstampclient(localNameCEB);
-            }
-
-            // 取出cebid
-            var ret = GetCEBID(localNameCEB);
-
-            alert("取出id用来存取入库字段值：" + ret);
-
-            // 上传文档
-        }
-
+    var date = new Date();
+    var year = date.getFullYear();
+    var mont = date.getMonth() +1;
+    if(parseInt(mont) <10) {
+        mont = "0" + mont;
     }
+    var day = date.getDate();
+    if(parseInt(day) <10) {
+        day = "0" + day;
+    }
+    var nowDate = year + "-" + mont + "-" + day;
+    alert(nowDate)
 </script>
 </html>

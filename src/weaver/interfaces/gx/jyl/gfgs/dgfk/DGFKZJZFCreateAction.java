@@ -33,7 +33,7 @@ public class DGFKZJZFCreateAction extends BaseBean implements Action {
 		String requestid = request.getRequestid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("股份公司-对公付款资金支付单退回操作，不执行接口.");
+			new BaseBean().writeLog("股份公司-对公付款资金支付单退回操作，不执行接口.");
 			return SUCCESS;
 		}
 		// 单据类型-值
@@ -131,6 +131,9 @@ public class DGFKZJZFCreateAction extends BaseBean implements Action {
 		String dgfklx_column = "dgfklx";
 		String dgfklx_value = "";
 
+		String qtyfkqt_column = "qtyfkqt";
+		String qtyfkqt_value = "";
+
 		Property[] properties = request.getMainTableInfo().getProperty();// 获取表单主字段信息
 		for (int i = 0; i < properties.length; i++) {
 			String name = properties[i].getName();// 主字段名称
@@ -226,6 +229,9 @@ public class DGFKZJZFCreateAction extends BaseBean implements Action {
 			if (name.equals(dgfklx_column)) {
 				dgfklx_value = value;
 			}
+			if (name.equals(qtyfkqt_column)) {
+				qtyfkqt_value = value;
+			}
 		}
 		writeLog("付款方帐号:"+fkflhh_value);
 		writeLog("付款方银行帐号:"+fkfyhzh_value);
@@ -269,10 +275,22 @@ public class DGFKZJZFCreateAction extends BaseBean implements Action {
 		if("1".equals(dgfklx_value)) {
 			qtyfzk = "2241040000";
 		}
+		String stype = "";
+		if("0".equals(zffs_value)) {
+			stype = "T";
+		}
+		if("1".equals(zffs_value)) {
+			stype = "E";
+		}
+		if("2".equals(zffs_value)) {
+			stype = "C";
+		}
+
+
 		List<JTCLFBXZJZFCreate_HeadModel> hEAD = new ArrayList<JTCLFBXZJZFCreate_HeadModel>();
 		JTCLFBXZJZFCreate_HeadModel model = new JTCLFBXZJZFCreate_HeadModel(djlx_value, gsdm_value, cn_value,
-				kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value, qtyfzk, sqrq_value,
-				jbr_value, sqje_value, hbm_value, fkrq_value, "T", gysmc_value, gyskhh_value,
+				kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value, qtyfkqt_value, sqrq_value,
+				jbr_value, sqje_value, hbm_value, fkrq_value, stype, gysmc_value, gyskhh_value,
 				gyskhzh_value, zjysm_value, "(付款)" + zy_value, fjzs_value,fkflhh_value,fkfyhzh_value);
 		hEAD.add(model);
 		JTCLFBXZJZFCreateModel head = new JTCLFBXZJZFCreateModel(hEAD);

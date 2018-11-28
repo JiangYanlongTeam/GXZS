@@ -7,7 +7,12 @@ import org.dom4j.Element;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
+import weaver.interfaces.swfa.WorkflowUtil;
+import weaver.workflow.webservices.WorkflowRequestInfo;
+import weaver.workflow.webservices.WorkflowService;
+import weaver.workflow.webservices.WorkflowServiceImpl;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -82,6 +87,17 @@ public class ReportResultPDFImp implements ReportResultPDF {
 			}
 			if(type==0){
 				if(Util.getIntValue(jobstatus,0)==1){
+
+					// 增加判断是否已经做过合并动作
+
+					if(isHasHB(requestid,qfieldname)) {
+						bean.writeLog("已经合并过，返回结果报告结束");
+						WorkflowUtil wfUtil = new WorkflowUtil();
+						boolean isSubmit = SubmitRequest(requestid,14164);
+						new BaseBean().writeLog("isSubmit:"+isSubmit);
+//						wfUtil.nextNodeBySubmit(requestid, Util.getIntValue(wfUtil.getCurroperators(requestid),0), "");
+						return 0;
+					}
 					//更新流程签批文件信息
 					WorkflowFilePDF file = new WorkflowFilePDF();
 					file.CEBXJobResultMerge(jobResult, requestid, wsid, qfieldname, formid, userid);
@@ -105,6 +121,32 @@ public class ReportResultPDFImp implements ReportResultPDF {
 		bean.writeLog("返回结果报告结束");
 		return status;
 	}
+
+	/**
+	 * 获得流程的详细信息
+	 *
+	 * @param requestid
+	 * @return
+	 * @throws RemoteException
+	 */
+	public static WorkflowRequestInfo getRequestInfo(int requestid, int userid) {
+		WorkflowService WorkflowServicePortTypeProxy = new WorkflowServiceImpl();
+		WorkflowRequestInfo WorkflowRequestInfo = WorkflowServicePortTypeProxy.getWorkflowRequest(requestid, userid, 0);// 调用接口获取对应requestid的数据
+		return WorkflowRequestInfo;
+	}
+
+	/**
+	 * 提交流程
+	 *
+	 * @throws RemoteException
+	 */
+	public boolean SubmitRequest(int requestid, int userid) {
+		WorkflowRequestInfo WorkflowRequestInfo = getRequestInfo(requestid, userid);
+		WorkflowService WorkflowServicePortTypeProxy = new WorkflowServiceImpl();
+		String str = WorkflowServicePortTypeProxy.submitWorkflowRequest(WorkflowRequestInfo, requestid, userid,
+				"submit", "");
+		return "success".equals(str);
+	}
 	
 	/**
 	 * 获取任务执行结果
@@ -127,6 +169,24 @@ public class ReportResultPDFImp implements ReportResultPDF {
 		}
 		
 		return jobResult;
+	}
+
+
+	public boolean isHasHB(int requestid,String fieldid) {
+		RecordSet recordSet = new RecordSet();
+		recordSet.execute("select formid from workflow_base where id in (" +
+				"select WORKFLOWID from WORKFLOW_REQUESTBASE where REQUESTID = '"+requestid+"')");
+		recordSet.next();
+		String formid = Util.null2o(recordSet.getString("formid"));
+		String tableName = "formtable_main_"+Math.abs(Integer.parseInt(formid));
+		String sql = "select " + fieldid + " from " + tableName + " where requestid = '"+requestid+"'";
+		recordSet.execute(sql);
+		recordSet.next();
+		String value = Util.null2String(recordSet.getString(fieldid));
+		if(!value.equals("")) {
+			return true;
+		}
+		return false;
 	}
 
 }

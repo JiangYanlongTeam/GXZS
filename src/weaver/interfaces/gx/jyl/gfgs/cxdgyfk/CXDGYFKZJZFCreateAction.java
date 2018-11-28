@@ -34,7 +34,7 @@ public class CXDGYFKZJZFCreateAction extends BaseBean implements Action {
 		String requestid = request.getRequestid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("股份公司-对公付款资金支付单退回操作，不执行接口.");
+			new BaseBean().writeLog("股份公司-对公付款资金支付单退回操作，不执行接口.");
 			return SUCCESS;
 		}
 		// 单据类型-值
@@ -276,6 +276,17 @@ public class CXDGYFKZJZFCreateAction extends BaseBean implements Action {
 		if(cx <= 0) {
 			return SUCCESS;
 		}
+
+		String stype = "";
+		if("0".equals(zffs_value)) {
+			stype = "T";
+		}
+		if("1".equals(zffs_value)) {
+			stype = "E";
+		}
+		if("2".equals(zffs_value)) {
+			stype = "C";
+		}
 		
 		String xmlstring = "";
 		String qt = "";
@@ -287,7 +298,7 @@ public class CXDGYFKZJZFCreateAction extends BaseBean implements Action {
 		List<JTCLFBXZJZFCreate_HeadModel> hEAD = new ArrayList<JTCLFBXZJZFCreate_HeadModel>();
 		JTCLFBXZJZFCreate_HeadModel model = new JTCLFBXZJZFCreate_HeadModel(djlx_value, gsdm_value, cn_value,
 				kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value, qt, sqrq_value,
-				jbr_value, df.format(cx), hbm_value, fkrq_value, "T", gysmc_value, gyskhh_value,
+				jbr_value, df.format(cx), hbm_value, fkrq_value, stype, gysmc_value, gyskhh_value,
 				gyskhzh_value, zjysm_value, "(付款)" + zy_value, fjzs_value,fkflhh_value,fkfyhzh_value);
 		hEAD.add(model);
 		JTCLFBXZJZFCreateModel head = new JTCLFBXZJZFCreateModel(hEAD);

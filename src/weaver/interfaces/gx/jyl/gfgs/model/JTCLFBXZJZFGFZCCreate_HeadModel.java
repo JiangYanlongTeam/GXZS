@@ -42,7 +42,7 @@ public class JTCLFBXZJZFGFZCCreate_HeadModel {
 		ABSTRACT = aBSTRACT;
 		NUMPG = nUMPG;
 		ABWHK = aBWHK;
-		eBELN = eBELN;
+		EBELN = eBELN;
 	}
 
 	private String ZDJLX;
@@ -69,15 +69,20 @@ public class JTCLFBXZJZFGFZCCreate_HeadModel {
 	private String ABWHK;
 	private String PAYER_CNAPS;
 	private String PAYBANK_NO;
-	private String eBELN;
+	private String EBELN;
 
 	@XmlElement(name = "EBELN")
-	public String geteBELN() {
-		return eBELN;
+	public String getEBELN() {
+		return EBELN;
 	}
-	public void seteBELN(String eBELN) {
-		this.eBELN = eBELN;
+
+	public void setEBELN(String EBELN) {
+		this.EBELN = EBELN;
 	}
+
+
+
+
 
 	@XmlElement(name = "PAYER_CNAPS")
 	public String getPAYER_CNAPS() {

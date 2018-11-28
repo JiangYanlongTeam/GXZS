@@ -36,7 +36,7 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 		String requestid = request.getRequestid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("股份公司-冲销对公预付款创建凭证退回操作，不执行接口.");
+			new BaseBean().writeLog("股份公司-冲销对公预付款创建凭证退回操作，不执行接口.");
 			return SUCCESS;
 		}
 		// 凭证类型-值
@@ -221,7 +221,7 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 
 		String tablename = "formtable_main_1106";
 
-		String headZY = ("(挂帐)" + zy_value);
+		String headZY = ("(冲预付)" + zy_value);
 		if (headZY.length() > 25) {
 			headZY = headZY.substring(0, 25);
 		}
@@ -236,7 +236,7 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 			List<JTCLFBXCreate_ItemModel> lines = new ArrayList<JTCLFBXCreate_ItemModel>();
 
 			RecordSet rs = new RecordSet();
-			String sql = "select b.yskm,b.jxskm,b.fpje,b.se,sfzp,b.sl from " + tablename + " a," + tablename
+			String sql = "select b.yskm,b.jxskm,b.fpje,b.se,sfzp,b.sl,b.cph from " + tablename + " a," + tablename
 					+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 			rs.execute(sql);
 			while (rs.next()) {
@@ -246,28 +246,29 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 				String jxskm_value = Util.null2String(rs.getString("jxskm"));
 				String sfzp_value = Util.null2String(rs.getString("sfzp"));
 				String sl_value = Util.null2String(rs.getString("sl"));
+				String cph = Util.null2String(rs.getString("cph"));
 				double tol = Util.getDoubleValue(bxjes_value) - Util.getDoubleValue(se_value);
 
-				String AUFNR_VALUE = "";
+				String AUFNR_VALUE = cph;
 
 				if ("0".equals(sfzp_value)) {
 					JTCLFBXCreate_ItemModel line = new JTCLFBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
-							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							df.format(tol), "", "(冲预付)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
 					lines.add(line);
 
 					JTCLFBXCreate_ItemModel line2 = new JTCLFBXCreate_ItemModel("S", jxskm_value, "", "", sl_value,
-							se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", "", "", "");
+							se_value, "", "(冲预付)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUE, "", "");
 					lines.add(line2);
 				} else {
 					JTCLFBXCreate_ItemModel line = new JTCLFBXCreate_ItemModel("S", yskm_value, "", "", "",
-							bxjes_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							bxjes_value, "", "(冲预付)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
 					lines.add(line);
 				}
 			}
 
 			String yfkdh = getDH(requestid);
 			JTCLFBXCreate_ItemModel line2 = new JTCLFBXCreate_ItemModel("H", yfzkqt_value, gysbm_value, "", "",
-					cxje_value, "", "(挂帐)" + zy_value, "", yfkdh, "", "", "", "");
+					cxje_value, "", "(冲预付)" + zy_value, "", yfkdh, "", "", "", "");
 			lines.add(line2);
 			JTCLFBXCreateModel model = new JTCLFBXCreateModel(headlist, lines);
 			try {
@@ -316,7 +317,7 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 			List<JTCLFBXCreate_ItemModel> lines = new ArrayList<JTCLFBXCreate_ItemModel>();
 
 			RecordSet rs = new RecordSet();
-			String sql = "select b.yskm,b.jxskm,b.fpje,b.se,sfzp,b.sl from " + tablename + " a," + tablename
+			String sql = "select b.yskm,b.jxskm,b.fpje,b.se,sfzp,b.sl,b.cph from " + tablename + " a," + tablename
 					+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 			rs.execute(sql);
 			while (rs.next()) {
@@ -326,21 +327,22 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 				String jxskm_value = Util.null2String(rs.getString("jxskm"));
 				String sfzp_value = Util.null2String(rs.getString("sfzp"));
 				String sl_value = Util.null2String(rs.getString("sl"));
+				String cph = Util.null2String(rs.getString("cph"));
 				double tol = Util.getDoubleValue(bxjes_value) - Util.getDoubleValue(se_value);
 
-				String AUFNR_VALUE = "";
+				String AUFNR_VALUE = cph;
 
 				if ("0".equals(sfzp_value)) {
 					JTCLFBXCreate_ItemModel line = new JTCLFBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
-							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							df.format(tol), "", "(冲预付)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
 					lines.add(line);
 
 					JTCLFBXCreate_ItemModel line2 = new JTCLFBXCreate_ItemModel("S", jxskm_value, "", "", sl_value,
-							se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", "", "", "");
+							se_value, "", "(冲预付)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUE, "", "");
 					lines.add(line2);
 				} else {
 					JTCLFBXCreate_ItemModel line = new JTCLFBXCreate_ItemModel("S", yskm_value, "", "", "",
-							bxjes_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							bxjes_value, "", "(冲预付)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
 					lines.add(line);
 				}
 			}
@@ -349,7 +351,7 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 
 			String yfkdh = getDH(requestid);
 			JTCLFBXCreate_ItemModel line2 = new JTCLFBXCreate_ItemModel("H", yfzkqt_value, gysbm_value, "", "",
-					cxje_value, "", "(挂帐)" + zy_value, "", yfkdh, "", "", "", "");
+					cxje_value, "", "(冲预付)" + zy_value, "", yfkdh, "", "", "", "");
 			lines.add(line2);
 
 			String gyszh = "";
@@ -360,7 +362,7 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 			}
 
 			JTCLFBXCreate_ItemModel line3 = new JTCLFBXCreate_ItemModel("H", gyszh, gysbm_value, "", "", cx, "",
-					"(挂帐)" + zy_value, "", ckpzbh_value, "", "", "", "");
+					"(冲预付)" + zy_value, "", ckpzbh_value, "", "", "", "");
 			lines.add(line3);
 			JTCLFBXCreateModel model = new JTCLFBXCreateModel(headlist, lines);
 			try {
@@ -409,7 +411,7 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 			List<JTCLFBXCreate_ItemModel> lines = new ArrayList<JTCLFBXCreate_ItemModel>();
 
 			RecordSet rs = new RecordSet();
-			String sql = "select b.yskm,b.jxskm,b.fpje,b.se,sfzp,b.sl from " + tablename + " a," + tablename
+			String sql = "select b.yskm,b.jxskm,b.fpje,b.se,sfzp,b.sl,b.cph from " + tablename + " a," + tablename
 					+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 			rs.execute(sql);
 			while (rs.next()) {
@@ -419,21 +421,22 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 				String jxskm_value = Util.null2String(rs.getString("jxskm"));
 				String sfzp_value = Util.null2String(rs.getString("sfzp"));
 				String sl_value = Util.null2String(rs.getString("sl"));
+				String cph = Util.null2String(rs.getString("cph"));
 				double tol = Util.getDoubleValue(bxjes_value) - Util.getDoubleValue(se_value);
 
-				String AUFNR_VALUE = "";
+				String AUFNR_VALUE = cph;
 
 				if ("0".equals(sfzp_value)) {
 					JTCLFBXCreate_ItemModel line = new JTCLFBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
-							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							df.format(tol), "", "(冲预付)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
 					lines.add(line);
 
 					JTCLFBXCreate_ItemModel line2 = new JTCLFBXCreate_ItemModel("S", jxskm_value, "", "", sl_value,
-							se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", "", "", "");
+							se_value, "", "(冲预付)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUE, "", "");
 					lines.add(line2);
 				} else {
 					JTCLFBXCreate_ItemModel line = new JTCLFBXCreate_ItemModel("S", yskm_value, "", "", "",
-							bxjes_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							bxjes_value, "", "(冲预付)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
 					lines.add(line);
 				}
 			}
@@ -441,12 +444,12 @@ public class CXDGYFKCreateAction extends BaseBean implements Action {
 			Double cx = Double.parseDouble(cxje_value) - Double.parseDouble(fpje_value);
 			
 			JTCLFBXCreate_ItemModel line0 = new JTCLFBXCreate_ItemModel("S", yhck_value, "", "", "",
-					df.format(cx), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, "", "", ysm_value);
+					df.format(cx), "", "(冲预付)" + zy_value, "", ckpzbh_value, cbzx_value, "", "", ysm_value);
 			lines.add(line0);
 
 			String yfkdh = getDH(requestid);
 			JTCLFBXCreate_ItemModel line2 = new JTCLFBXCreate_ItemModel("H", yfzkqt_value, gysbm_value, "", "",
-					cxje_value, "", "(挂帐)" + zy_value, "", yfkdh, "", "", "", "");
+					cxje_value, "", "(冲预付)" + zy_value, "", yfkdh, "", "", "", "");
 			lines.add(line2);
 
 			JTCLFBXCreateModel model = new JTCLFBXCreateModel(headlist, lines);

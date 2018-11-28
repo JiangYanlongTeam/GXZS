@@ -4,8 +4,23 @@ import weaver.conn.RecordSet;
 import weaver.conn.RecordSetDataSource;
 import weaver.general.BaseBean;
 import weaver.general.Util;
+import weaver.hrm.job.JobTitlesComInfo;
+import weaver.hrm.resource.ResourceComInfo;
+import weaver.interfaces.schedule.BaseCronJob;
 
-public class SyncTask extends BaseBean {
+public class SyncTask extends BaseCronJob {
+
+    public BaseBean baseBean = new BaseBean();
+
+    @Override
+    public void execute() {
+        writeLog("即将同步岗位..");
+        syncJobtitles("");
+        writeLog("同步岗位完成..");
+        writeLog("即将同步人员..");
+        syncHrmresurce("");
+        writeLog("同步人员完成..");
+    }
 
     public void syncJobtitles(String id) {
         RecordSet rsdep = new RecordSet();
@@ -33,8 +48,9 @@ public class SyncTask extends BaseBean {
             while (rsdep.next()) {
                 jobdepartmentid = Util.null2String(rsdep.getString("id"));
             }
-            if("".equals(jobdepartmentid)) {
-                String updatesylsql="update UF_EXJOBTITLES set returninfo = '更新岗位时部门编码"+deptcode+" 在oa中不存在' where id='"+ syncid + "'";
+            if ("".equals(jobdepartmentid)) {
+                writeLog("更新岗位时部门编码" + deptcode + " 在oa中不存在");
+                String updatesylsql = "update UF_EXJOBTITLES set returninfo = '更新岗位时部门编码" + deptcode + " 在oa中不存在' where id='" + syncid + "'";
                 recordSetDataSource2.execute(updatesylsql);
                 continue;
             }
@@ -53,18 +69,34 @@ public class SyncTask extends BaseBean {
                         + "',jobtitleremark='" + companyid
                         + "',jobdepartmentid='" + jobdepartmentid + "'");
                 updatesql.append(" where jobtitlecode='" + jobcode + "'");
-                rsdep.execute(updatesql.toString());
                 writeLog("更新职位数据" + updatesql.toString());
+                rsdep.execute(updatesql.toString());
+                try {
+                    JobTitlesComInfo jobTitlesComInfo = new JobTitlesComInfo();
+                    jobTitlesComInfo.removeJobTitlesCache();
+                    writeLog("更新岗位缓存成功");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    writeLog("更新岗位缓存失败");
+                }
             } else {
                 StringBuffer insertsql = new StringBuffer(
                         "insert into HrmJobTitles(jobtitlecode,jobtitlemark,jobtitlename,jobtitleremark,jobdepartmentid)");
                 insertsql.append("values('" + jobcode + "','" + jobtitlemark
                         + "','" + jobtitlename + "','" + companyid + "','"
                         + jobdepartmentid + "')");
-                rsdep.execute(insertsql.toString());
                 writeLog("插入职位数据" + insertsql.toString());
+                rsdep.execute(insertsql.toString());
+                try {
+                    JobTitlesComInfo jobTitlesComInfo = new JobTitlesComInfo();
+                    jobTitlesComInfo.removeJobTitlesCache();
+                    writeLog("更新岗位缓存成功");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    writeLog("更新岗位缓存失败");
+                }
             }
-            String updatesylsql="update uf_exjobtitles set flag=0 where id='"+ syncid + "'";
+            String updatesylsql = "update uf_exjobtitles set flag=0 ,returninfo = '操作成功' where id='" + syncid + "'";
             recordSetDataSource2.execute(updatesylsql);
         }
     }
@@ -116,6 +148,7 @@ public class SyncTask extends BaseBean {
             }
             if (!depflag) {
                 returninfo = "同步人员，姓名为" + name + ",身份证号为" + certificatenum + "，对应部门编码" + departmentcode + "在oa中不存在";
+                writeLog(returninfo);
                 recordSetDataSource2.execute("update UF_EXPERSON set returninfo = '" + returninfo + "' where id = '" + syncid + "'");
                 continue;
             }
@@ -133,23 +166,27 @@ public class SyncTask extends BaseBean {
             boolean jobflag = false;
             while (rsdep.next()) {//存在职位
                 jobflag = true;
+                jobtitle = Util.null2String(rsdep.getString("id"));
             }
             if (!jobflag) {
                 returninfo = "同步人员，姓名为" + name + ",身份证号为" + certificatenum + "，对应岗位编码" + jobcode + "在oa中不存在";
+                writeLog(returninfo);
                 recordSetDataSource2.execute("update UF_EXPERSON set returninfo = '" + returninfo + "' where id = '" + syncid + "'");
                 continue;
             }
 
-            if("".equals(certificatenum)) {
-                returninfo="姓名"+name+"的身份证号为空";
+            if ("".equals(certificatenum)) {
+                returninfo = "姓名" + name + "的身份证号为空";
+                writeLog(returninfo);
                 recordSetDataSource2.execute("update UF_EXPERSON set returninfo = '" + returninfo + "' where id = '" + syncid + "'");
                 continue;
             }
 
-            if(!checkCertificatenum(certificatenum)){
+            if (!checkCertificatenum(certificatenum)) {
                 rsdep.executeProc("HrmResourceMaxId_Get", "");
                 rsdep.next();
                 int maxid = rsdep.getInt(1);
+                writeLog("获取人员当前最大id："+maxid);
 
                 StringBuffer insertsql = new StringBuffer(
                         "insert into hrmresource(id,lastname,sex,birthday,mobile,");
@@ -157,15 +194,23 @@ public class SyncTask extends BaseBean {
                 insertsql.append("certificatenum,workcode,folk,nativeplace,maritalstatus,");
                 insertsql.append("policy,textfield1,textfield2,educationlevel,Status,");
                 insertsql.append("loginid,password,systemlanguage,seclevel,dsporder,textfield3)");
-                insertsql.append("values('"+maxid+"','" + name + "','" + sex + "','"
+                insertsql.append("values('" + maxid + "','" + name + "','" + sex + "','"
                         + birthday + "','" + mobile + "','" + email + "',");
                 insertsql.append("'" + departmentid + "','" + jobtitle + "','"
-                        + subcompanyid + "','" + certificatenum + "','"+hrmno+"','" + folk+ "',");
-                insertsql.append("'" + nativeplace + "','"+maritalstatus+"','" + policy + "','" + subcomcode + "','"+insertbz+"','"
+                        + subcompanyid + "','" + certificatenum + "','" + hrmno + "','" + folk + "',");
+                insertsql.append("'" + nativeplace + "','" + maritalstatus + "','" + policy + "','" + subcomcode + "','" + insertbz + "','"
                         + edulevel + "','" + status + "',");
-                insertsql.append("'"+certificatenum+"','"+password+"','7','10','"+maxid+"','"+cbzx+"')");
+                insertsql.append("'" + certificatenum + "','" + password + "','7','10','" + maxid + "','" + cbzx + "')");
+                writeLog("新增人员数据" + insertsql.toString());
                 rsdep.execute(insertsql.toString());
-                writeLog("新增人员数据"+insertsql.toString());
+
+                ResourceComInfo resourceComInfo = null;
+                try {
+                    resourceComInfo = new ResourceComInfo();
+                    resourceComInfo.removeResourceCache();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 StringBuffer updatesql = new StringBuffer(
                         "update hrmresource set lastname='" + name + "',");
@@ -175,38 +220,35 @@ public class SyncTask extends BaseBean {
                         + departmentid + "',jobtitle='" + jobtitle
                         + "',subcompanyid1='" + subcompanyid + "',");
                 updatesql.append("certificatenum='" + certificatenum
-                        + "',folk='" + folk + "',nativeplace='" + nativeplace+ "',maritalstatus='"+maritalstatus+"',");
-                updatesql.append("policy='" + policy + "',textfield1='" +subcomcode+ "',textfield3='" +cbzx+ "',educationlevel='"
-                        + edulevel + "',Status='" + status + "' , workcode  = '"+hrmno+"' ");
+                        + "',folk='" + folk + "',nativeplace='" + nativeplace + "',maritalstatus='" + maritalstatus + "',");
+                updatesql.append("policy='" + policy + "',textfield1='" + subcomcode + "',textfield3='" + cbzx + "',educationlevel='"
+                        + edulevel + "',Status='" + status + "' , workcode  = '" + hrmno + "' ");
                 updatesql.append(" where CERTIFICATENUM='" + certificatenum + "'");
+                writeLog("更新人员数据" + updatesql.toString());
                 rsdep.execute(updatesql.toString());
-                writeLog("更新人员数据"+updatesql.toString());
+                ResourceComInfo resourceComInfo = null;
+                try {
+                    resourceComInfo = new ResourceComInfo();
+                    resourceComInfo.removeResourceCache();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            String updatesylsql="update UF_EXPERSON set flag=0 where id='"+ syncid + "'";
+            String updatesylsql = "update UF_EXPERSON set flag=0,returninfo = '操作成功' where id='" + syncid + "'";
             recordSetDataSource2.execute(updatesylsql);
-            writeLog("更新"+updatesylsql.toString());
+            writeLog("更新" + updatesylsql.toString());
         }
     }
 
     public boolean checkCertificatenum(String workcode) {
         RecordSet rs = new RecordSet();
-        String sb="select * from hrmresource where CERTIFICATENUM = '"+workcode+"' ";
+        String sb = "select * from hrmresource where CERTIFICATENUM = '" + workcode + "' ";
         rs.execute(sb);
-        boolean flag=false;
+        boolean flag = false;
         while (rs.next()) {
-            flag=true;
+            flag = true;
         }
-        return flag;
-    }
-
-    public boolean checkHrmAndLoginExists(String workcode,String no) {
-        RecordSet rs = new RecordSet();
-        String sb="select * from hrmresource where workcode='"+workcode+"' and textfield2='hr' ";
-        rs.execute(sb);
-        boolean flag=false;
-        while (rs.next()) {
-            flag=true;
-        }
+        writeLog("检查人员身份证号码："+workcode + flag);
         return flag;
     }
 
@@ -219,5 +261,44 @@ public class SyncTask extends BaseBean {
             flag = true;
         }
         return flag;
+    }
+
+    public void updateHrmCominfo() {
+        RecordSet recordSet = new RecordSet();
+        try {
+            ResourceComInfo resourceComInfo = new ResourceComInfo();
+            String getMaxId = "select max(id) maxid from hrmresource ";
+            recordSet.execute(getMaxId);
+            recordSet.next();
+            String maxid = Util.null2o(recordSet.getString("maxid"));
+            resourceComInfo.getLastname(maxid);
+
+            resourceComInfo.removeResourceCache();
+
+            writeLog("更新人员缓存成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("更新人员缓存失败");
+        }
+    }
+
+    public void updateJobTitleCominfo() {
+        RecordSet recordSet = new RecordSet();
+        try {
+            JobTitlesComInfo jobTitlesComInfo = new JobTitlesComInfo();
+            String getMaxId = "select max(id) maxid from HrmJobTitles ";
+            recordSet.execute(getMaxId);
+            recordSet.next();
+            String maxid = Util.null2o(recordSet.getString("maxid"));
+            jobTitlesComInfo.getJobTitlesname(maxid);
+            writeLog("更新岗位缓存成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("更新岗位缓存失败");
+        }
+    }
+
+    public void writeLog(Object o) {
+        baseBean.writeLog(o);
     }
 }

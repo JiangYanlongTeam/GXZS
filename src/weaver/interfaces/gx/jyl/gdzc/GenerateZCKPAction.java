@@ -39,17 +39,19 @@ public class GenerateZCKPAction extends BaseBean implements Action {
 	@Override
 	public String execute(RequestInfo request) {
 		String requestid = request.getRequestid();
-		String number = getPropValue("sh", "wbs_number");
-		String system = getPropValue("sh", "wbs_system");
+		String workflowid = request.getWorkflowid();
+		String number = getSysIDByWfID(workflowid);
+		String system = getGsdmByWfID(workflowid);
+		//String system = getPropValue("sh", "wbs_system");
 		//ceshiji 788
-		String sql = "select b.* from formtable_main_864 a,formtable_main_864_dt1 b where a.id = b.mainid and a.requestid = '"+requestid+"' and b.zt1 is null order by b.id";
+		String sql = "select a.sysid,b.* from formtable_main_864 a,formtable_main_864_dt1 b where a.id = b.mainid and a.requestid = '"+requestid+"' and b.zt1 is null order by b.id";
 		RecordSet rs = new RecordSet();
 		RecordSet rs1 = new RecordSet();
 		rs.execute(sql);
 		int i = 1;
 		while(rs.next()) {
 			String ID = Util.null2String(rs.getString("ID"));
-			String BUKRS = number;
+			String BUKRS = system;
 			String ANLKL = Util.null2String(rs.getString("ANLKL"));
 			String TXT50 = Util.null2String(rs.getString("TXT50"));
 			String ANLHTXT = Util.null2String(rs.getString("ANLHTXT"));
@@ -57,11 +59,14 @@ public class GenerateZCKPAction extends BaseBean implements Action {
 			String KOSTL = Util.null2String(rs.getString("KOSTL"));
 			String KOSTLV = Util.null2String(rs.getString("KOSTLV"));
 			String PS_PSP_PNR2 = Util.null2String(rs.getString("PS_PSP_PNR2"));
+			if("10662".equals(workflowid)) {
+				PS_PSP_PNR2 = rs.getString("PS_PSP_PNR1");
+			}
 			String RAUMN = Util.null2String(rs.getString("RAUMN"));
 			String KFZKZ = Util.null2String(rs.getString("KFZKZ"));
 			String ORD41 = Util.null2String(rs.getString("ORD41"));
 			String ORD43 = Util.null2String(rs.getString("ORD43"));
-			String LIFNR = Util.null2String(rs.getString("LIFNR"));
+			String LIFNR = Util.null2String(rs.getString("LIEFE"));
 			GDZCModel model = new GDZCModel(ID, BUKRS, ANLKL, TXT50, ANLHTXT, INVZU, KOSTL, KOSTLV, PS_PSP_PNR2, RAUMN, KFZKZ, ORD41, ORD43, LIFNR, "");
 			//String data = transferDataToSAP(model);
 			String data = "";
@@ -73,7 +78,7 @@ public class GenerateZCKPAction extends BaseBean implements Action {
 			writeLog("明细["+ID+"]固定资产生成资产卡片传入xml：" + data);
 			SI_1083_OA2ERP_ASSET_OUTProxy proxy = new SI_1083_OA2ERP_ASSET_OUTProxy();
 			DT_1083_OA2ERP_ASSET DT_1083_OA2ERP_ASSET = new DT_1083_OA2ERP_ASSET();
-			DT_1083_OA2ERP_ASSET.setSYSTEM(system);
+			DT_1083_OA2ERP_ASSET.setSYSTEM(number);
 			DT_1083_OA2ERP_ASSET.setOUTPUT(data);
 			DT_1083_OA2ERP_ASSET_RETURN res = null;
 			try {
@@ -102,6 +107,8 @@ public class GenerateZCKPAction extends BaseBean implements Action {
 				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
+				request.getRequestManager().setMessageid("failed");
+				request.getRequestManager().setMessagecontent("明细" + i + "调用SAP生成资产卡片异常，异常消息：" + e.getMessage());
 			}
 			i++;
 		}
@@ -159,4 +166,20 @@ public class GenerateZCKPAction extends BaseBean implements Action {
         }
         return map;
     }
+
+	public String getSysIDByWfID(String workflowid) {
+		RecordSet recordSet = new RecordSet();
+		recordSet.execute("select * from uf_gdzcwbs where lcid = '"+workflowid+"'");
+		recordSet.next();
+		String sysid = Util.null2String(recordSet.getString("sysid"));
+		return sysid;
+	}
+
+	public String getGsdmByWfID(String workflowid) {
+		RecordSet recordSet = new RecordSet();
+		recordSet.execute("select * from uf_gdzcwbs where lcid = '"+workflowid+"'");
+		recordSet.next();
+		String gsdm = Util.null2String(recordSet.getString("gsdm"));
+		return gsdm;
+	}
 }

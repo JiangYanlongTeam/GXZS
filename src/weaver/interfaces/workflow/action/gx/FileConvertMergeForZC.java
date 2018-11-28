@@ -25,7 +25,8 @@ import weaver.interfaces.ceb.webservices.ReportResultImp;
  * @author Administrator
  *
  */
-public class FileConvertMergeForZC extends BaseBean implements Action{
+public class
+FileConvertMergeForZC extends BaseBean implements Action{
 
 	
 	public String execute(RequestInfo request) {

@@ -36,7 +36,7 @@ public class JTFYBX_CLFCreateAction extends BaseBean implements Action {
 		String requestid = request.getRequestid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("资金凭证单退回操作，不执行接口.");
+			new BaseBean().writeLog("资金凭证单退回操作，不执行接口.");
 			return SUCCESS;
 		}
 		// 凭证创建人-值
@@ -446,12 +446,12 @@ public class JTFYBX_CLFCreateAction extends BaseBean implements Action {
 					String zy = username + "报" + selectvalue;
 					
 					JTFYBX_CLFCreate_ItemModel line = new JTFYBX_CLFCreate_ItemModel("S", yskm, "", "", sl, df.format(tol), 
-							"", "(挂帐)" + zy + "进项税", "", ckpzbh_value, cbzx_value, gsxm_value, "", "");
+							"", "(挂帐)" + zy , "", ckpzbh_value, cbzx_value, gsxm_value, "", "");
 					lines.add(line);
 					
 					if("0".equals(sfzp)) {
 						JTFYBX_CLFCreate_ItemModel line1 = new JTFYBX_CLFCreate_ItemModel("S", jxskm, "", "", sl, se, 
-								"", "(挂帐)" + zy, "", ckpzbh_value, "", gsxm_value, "", "");
+								"", "(挂帐)" + zy + "进项税", "", ckpzbh_value, "", gsxm_value, "", "");
 						lines.add(line1);
 					}
 				}

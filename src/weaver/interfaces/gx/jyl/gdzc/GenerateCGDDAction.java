@@ -20,6 +20,7 @@ import net.jsgx.www.E1D.service.DT_1084_OA2ERP_PO_RETURN;
 import net.jsgx.www.E1D.service.SI_1084_OA2ERP_PO_OUTProxy;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
+import weaver.general.Util;
 import weaver.interfaces.gx.jyl.util.XMLUtil;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
@@ -29,10 +30,18 @@ public class GenerateCGDDAction extends BaseBean implements Action {
 	@Override
 	public String execute(RequestInfo request) {
 		String requestid = request.getRequestid();
-		String number = getPropValue("sh", "wbs_number");
-		String system = getPropValue("sh", "wbs_system");
+		String workflowid = request.getWorkflowid();
+		String number = getSysIDByWfID(workflowid);
+		String system = getGsdmByWfID(workflowid);
+//		String number = getPropValue("sh", "wbs_number");
+//		if("10662".equals(workflowid)) {
+//			number = getPropValue("jtwbs", "wbs_number");
+//		} else {
+//			number = getPropValue("sh", "wbs_number");
+//		}
+		//String system = getPropValue("sh", "wbs_system");
 		//ceshi 788
-		String sql = "select b.* from formtable_main_864 a,formtable_main_864_dt1 b where a.id = b.mainid and a.requestid = '"+requestid+"' and b.zt2 is null order by b.LIEFE";
+		String sql = "select a.sysid,b.* from formtable_main_864 a,formtable_main_864_dt1 b where a.id = b.mainid and a.requestid = '"+requestid+"' and b.zt2 is null order by b.LIEFE";
 		RecordSet rs = new RecordSet();
 		rs.execute(sql);
 		Map<String,List<CGDDModel>> map = new HashMap<String,List<CGDDModel>>();
@@ -42,8 +51,8 @@ public class GenerateCGDDAction extends BaseBean implements Action {
 			String iD = rs.getString("id");
 			String bSART = rs.getString("BSART");
 			String lIFNR = rs.getString("LIEFE");
-			String bUKRS = number;
-			String eKORG = number;
+			String bUKRS = system;
+			String eKORG = system;
 			String eKGRP = rs.getString("EKGRP");
 			String hTKEY = rs.getString("HTKEY");
 			String hTTXT = rs.getString("HTTXT");
@@ -54,6 +63,9 @@ public class GenerateCGDDAction extends BaseBean implements Action {
 			String lMEIN = rs.getString("LMEIN");
 			String aNLN1 = rs.getString("ANLN1");
 			String pS_POSID = rs.getString("PS_PSP_PNR2");
+			if("10662".equals(workflowid)) {
+				pS_POSID = rs.getString("PS_PSP_PNR1");
+			}
 			String sAKTO = rs.getString("SAKTO");
 			String kOSTL = rs.getString("KOSTL");
 			String eEIND = rs.getString("EEIND");
@@ -90,7 +102,7 @@ public class GenerateCGDDAction extends BaseBean implements Action {
 				}
 				writeLog("流程【"+requestid+"】发送供应商【"+key+"】合并数据到SAP数据：" + data);
 				DT_1084_OA2ERP_PO DT_1084_OA2ERP_PO = new DT_1084_OA2ERP_PO();
-				DT_1084_OA2ERP_PO.setSYSTEM(system);
+				DT_1084_OA2ERP_PO.setSYSTEM(number);
 				DT_1084_OA2ERP_PO.setOUTPUT(data);
 				try {
 					DT_1084_OA2ERP_PO_RETURN res = proxy.SI_1084_OA2ERP_PO_OUT(DT_1084_OA2ERP_PO);
@@ -118,6 +130,8 @@ public class GenerateCGDDAction extends BaseBean implements Action {
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
+					request.getRequestManager().setMessageid("failed");
+					request.getRequestManager().setMessagecontent("调用接口异常：" + e.getMessage());
 				}
 			}
 		}
@@ -163,4 +177,20 @@ public class GenerateCGDDAction extends BaseBean implements Action {
         }
         return map;
     }
+
+    public String getSysIDByWfID(String workflowid) {
+    	RecordSet recordSet = new RecordSet();
+    	recordSet.execute("select * from uf_gdzcwbs where lcid = '"+workflowid+"'");
+    	recordSet.next();
+    	String sysid = Util.null2String(recordSet.getString("sysid"));
+    	return sysid;
+	}
+
+	public String getGsdmByWfID(String workflowid) {
+		RecordSet recordSet = new RecordSet();
+		recordSet.execute("select * from uf_gdzcwbs where lcid = '"+workflowid+"'");
+		recordSet.next();
+		String gsdm = Util.null2String(recordSet.getString("gsdm"));
+		return gsdm;
+	}
 }

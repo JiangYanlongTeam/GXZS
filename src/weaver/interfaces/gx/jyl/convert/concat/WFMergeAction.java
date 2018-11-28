@@ -70,27 +70,27 @@ public class WFMergeAction extends BaseBean implements Action {
             wjsize = zw.getSize();
             cebutil.UnZip(fileRealPath, hzname); //解压文件
 
-            writeLog("[附件字段]" + wfcminfo.getFujian() + ",值：" + rfcminfo.getFujian() + "");
-            String[] othernames = Util.TokenizerString2(rfcminfo.getFujian(), ",");
-            int fcou = 0;
-            for (int i = 0; i < othernames.length; i++) {
-
-                DocFileInfo wj = new DocFileInfo(Util.getIntValue(othernames[i], 0)); //获取文件信息
-
-                if (!"".equals(wj.getHzname())) {
-                    if (fcou == 0) {
-                        srcurlTrueName += "http://" + url + "/" + wj.getFileTrueName();
-
-                    } else {
-                        srcurlTrueName += "|" + "http://" + url + "/" + wj.getFileTrueName();
-
-                    }
-                    fcou++;
-                }
-
-                cebutil.UnZip(wj.getFileRealPath(), wj.getHzname());     //解压文件
-
-            }
+//            writeLog("[附件字段]" + wfcminfo.getFujian() + ",值：" + rfcminfo.getFujian() + "");
+//            String[] othernames = Util.TokenizerString2(rfcminfo.getFujian(), ",");
+//            int fcou = 0;
+//            for (int i = 0; i < othernames.length; i++) {
+//
+//                DocFileInfo wj = new DocFileInfo(Util.getIntValue(othernames[i], 0)); //获取文件信息
+//
+//                if (!"".equals(wj.getHzname())) {
+//                    if (fcou == 0) {
+//                        srcurlTrueName += "http://" + url + "/" + wj.getFileTrueName();
+//
+//                    } else {
+//                        srcurlTrueName += "|" + "http://" + url + "/" + wj.getFileTrueName();
+//
+//                    }
+//                    fcou++;
+//                }
+//
+//                cebutil.UnZip(wj.getFileRealPath(), wj.getHzname());     //解压文件
+//
+//            }
 
             if (srcurlTrueName.length() > 0) {
 
@@ -113,12 +113,12 @@ public class WFMergeAction extends BaseBean implements Action {
                     boolean ff = workflowFile.UpdateCebjobresultSign(requestid, Util.getIntValue(jobid), wfcminfo.getId(), wfcminfo.getQsignfieldname(), rfcminfo.getFormid(), userid);
                     if (!ff) {
                         request.getRequestManager().setMessageid("Failed");
-                        request.getRequestManager().setMessagecontent("正文附件合并失败，任务编号:" + jobid + "");
+                        request.getRequestManager().setMessagecontent("正文转PDF失败，任务编号:" + jobid + "");
                         return Action.SUCCESS;
                     }
                 } else {
                     request.getRequestManager().setMessageid("Failed");
-                    request.getRequestManager().setMessagecontent("正文附件合并失败，任务编号:" + jobid + "");
+                    request.getRequestManager().setMessagecontent("正文转PDF失败，任务编号:" + jobid + "");
                     return Action.SUCCESS;
                 }
             } catch (RemoteException e) {

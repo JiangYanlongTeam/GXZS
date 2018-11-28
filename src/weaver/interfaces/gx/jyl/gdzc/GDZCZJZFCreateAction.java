@@ -38,7 +38,7 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 		int formid = request.getRequestManager().getFormid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new BaseBean().writeLog("股份公司-固定资产生成资金支付单退回操作，不执行接口.");
+			new BaseBean().writeLog("集团本部-固定资产生成资金支付单退回操作，不执行接口.");
 			return SUCCESS;
 		}
 
@@ -120,6 +120,8 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 			Double NETWR_value = Double.parseDouble(Util.null2o(map.get("netwr")));
 			String EBELN_val = Util.null2String(map.get("ebeln"));
 
+			writeLog("供应商名称：" + gysbm_value);
+
 			GYSINFO info = new GYSINFO();
 			info.setGysmc_value(skfhm_value);
 			info.setGyskhh_value(gyskhh_value);
@@ -139,8 +141,10 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 				gysMap.put(gysbm_value, info);
 			}
 		}
+		writeLog("gysMap:"+gysMap.toString());
 		for (Entry<String, GYSINFO> entry : gysMap.entrySet()) {
 			GYSINFO gysinfo = entry.getValue();
+			writeLog("gysinfo:"+gysinfo.toString());
 			String cbzx_value = gysinfo.getCbzx_value();
 			String gysbm_value = gysinfo.getGysbm_value();
 			String gyskhh_value = gysinfo.getGyskhh_value();
@@ -165,12 +169,14 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 			hEAD.add(model);
 			JTCLFBXZJZFGDZCCreateModel head = new JTCLFBXZJZFGDZCCreateModel(hEAD);
 			try {
-				xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFGFZCCreate_HeadModel.class);
+				xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFGDZCCreateModel.class);
 			} catch (JAXBException e) {
 				e.printStackTrace();
+				setFailMessage(request, "failed", "转换为XML失败：" + e.getMessage());
+				return SUCCESS;
 			}
 
-			writeLog("股份公司-固定资产资金支付单傳入xml参数：" + xmlstring);
+			writeLog("集团本部-固定资产资金支付单傳入xml参数：" + xmlstring);
 			SI_1049_ALL2ERP_ZJZFSQ_OUTProxy proxy = new SI_1049_ALL2ERP_ZJZFSQ_OUTProxy();
 			DT_1049_ALL2ERP_ZJZFSQ DT_1049_ALL2ERP_ZJZFSQ = new DT_1049_ALL2ERP_ZJZFSQ();
 			DT_1049_ALL2ERP_ZJZFSQ.setOUTPUT(xmlstring);
@@ -179,7 +185,7 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 			try {
 				DT_1049_ALL2ERP_ZJZFSQ_RETURN = proxy.SI_1049_ALL2ERP_ZJZFSQ_OUT(DT_1049_ALL2ERP_ZJZFSQ);
 				String returnmessage = DT_1049_ALL2ERP_ZJZFSQ_RETURN.getINPUT();
-				writeLog("股份公司-固定资产资金支付单返回消息：" + returnmessage);
+				writeLog("集团本部-固定资产资金支付单返回消息：" + returnmessage);
 				Map<String, String> map = publicmethod.readXMLForSQ(returnmessage);
 				if (null != map && !map.isEmpty()) {
 					String type = (String) map.get("TYPE");
@@ -189,13 +195,13 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 					if ("S".equalsIgnoreCase(type)) {
 						updateJTCLFXBXZJZFDDG(id_value, type, code, message, no, "GFGS_CLFYBX", gysbm_value);
 					} else {
-						setFailMessage(request, "failed", "股份公司-固定资产资金支付单失败：TYPE：" + type + " code：" + code
+						setFailMessage(request, "failed", "集团本部-固定资产资金支付单失败：TYPE：" + type + " code：" + code
 								+ " applyno：" + no + " message：" + message);
 						return SUCCESS;
 					}
 				}
 			} catch (RemoteException e) {
-				setFailMessage(request, "failed", "股份公司-固定资产资金支付单接口异常：" + e);
+				setFailMessage(request, "failed", "集团本部-固定资产资金支付单接口异常：" + e);
 				return SUCCESS;
 			}
 		}
@@ -229,5 +235,21 @@ public class GDZCZJZFCreateAction extends BaseBean implements Action {
 				+ message + "',ctype = '" + type + "' where mainid = '" + requestid + "' and LIEFE = '" + gysbm_value
 				+ "' ";
 		rs.execute(sql);
+	}
+
+	public static void main(String[] args) {
+		List<JTCLFBXZJZFGFZCCreate_HeadModel> hEAD = new ArrayList<JTCLFBXZJZFGFZCCreate_HeadModel>();
+		JTCLFBXZJZFGFZCCreate_HeadModel model = new JTCLFBXZJZFGFZCCreate_HeadModel("", "", "",
+				"", "", "", "", "", "","", "", "",
+				"", "", "", "", "T", "", "", "",
+				"", "(付款)" + "", "", "", "");
+		hEAD.add(model);
+		JTCLFBXZJZFGDZCCreateModel head = new JTCLFBXZJZFGDZCCreateModel(hEAD);
+		try {
+			String xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFGDZCCreateModel.class);
+			System.out.println(xmlstring);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 	}
 }

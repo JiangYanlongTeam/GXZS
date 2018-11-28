@@ -36,7 +36,7 @@ public class JTFYBX_YBFYBXCreateAction extends BaseBean implements Action {
 		String requestid = request.getRequestid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("集团费用报销-一般费用报销退回操作，不执行接口.");
+			new BaseBean().writeLog("集团费用报销-一般费用报销退回操作，不执行接口.");
 			return SUCCESS;
 		}
 		// 凭证抬头文本-值
@@ -293,7 +293,7 @@ public class JTFYBX_YBFYBXCreateAction extends BaseBean implements Action {
 				headlist.add(headermodel);
 				List<JTFYBX_YBFYBXCreate_ItemModel> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel>();
 				RecordSet rs = new RecordSet();
-				String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.cph from " + tablename + " a," + tablename
+				String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.cph,a.glfyflf from " + tablename + " a," + tablename
 						+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 				rs.execute(sql);
 				while (rs.next()) {
@@ -305,6 +305,7 @@ public class JTFYBX_YBFYBXCreateAction extends BaseBean implements Action {
 					String sl_value = Util.null2o(rs.getString("sl"));
 					String cbzx_value = Util.null2o(rs.getString("cbzx"));
 					String cph_value = Util.null2String(rs.getString("cph"));
+					String glfyflf = Util.null2String(rs.getString("glfyflf"));
 					double tol = Util.getDoubleValue(bxjes_value) - Util.getDoubleValue(se_value);
 					String AUFNR_VALUE = "";
 					if (splx.equals(fylx_value)) {
@@ -312,6 +313,7 @@ public class JTFYBX_YBFYBXCreateAction extends BaseBean implements Action {
 					} else {
 						AUFNR_VALUE = gsxm_value;
 					}
+
 					if ("0".equals(sfzp_value)) {
 						JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
 								df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
@@ -326,6 +328,39 @@ public class JTFYBX_YBFYBXCreateAction extends BaseBean implements Action {
 						JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("S", jxskm_value, "", "",
 								sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "");
 						lines.add(line2);
+
+						if(yskm_value.equals("2211010400")) {
+							JTFYBX_YBFYBXCreate_ItemModel line3 = new JTFYBX_YBFYBXCreate_ItemModel("S", glfyflf, "", "", sl_value,
+									df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							lines.add(line3);
+							String AUFNR_VALUES1 = "";
+							if (splx.equals(fylx_value)) {
+								AUFNR_VALUES1 = "";
+							} else {
+								AUFNR_VALUES1 = gsxm_value;
+							}
+							// 稅不带成本中心
+							JTFYBX_YBFYBXCreate_ItemModel line4 = new JTFYBX_YBFYBXCreate_ItemModel("S", jxskm_value, "", "",
+									sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "");
+							lines.add(line4);
+						}
+
+						if(yskm_value.equals("2211010400")) {
+							JTFYBX_YBFYBXCreate_ItemModel line3 = new JTFYBX_YBFYBXCreate_ItemModel("S", glfyflf, "", "", sl_value,
+									df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
+							lines.add(line3);
+							String AUFNR_VALUES1 = "";
+							if (splx.equals(fylx_value)) {
+								AUFNR_VALUES1 = "";
+							} else {
+								AUFNR_VALUES1 = gsxm_value;
+							}
+							// 稅不带成本中心
+							JTFYBX_YBFYBXCreate_ItemModel line4 = new JTFYBX_YBFYBXCreate_ItemModel("S", jxskm_value, "", "",
+									sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "");
+							lines.add(line4);
+						}
+
 					} else {
 						JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", "",
 								df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");

@@ -15,7 +15,9 @@ import weaver.general.Util;
 import weaver.hrm.resource.ResourceComInfo;
 import weaver.interfaces.gx.jyl.cw.base.CWPublicMethod;
 import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreateModel;
+import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreateModel2;
 import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreate_HeadModel;
+import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreate_HeadModel2;
 import weaver.interfaces.gx.jyl.util.XMLUtil;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.Property;
@@ -32,7 +34,7 @@ public class JTYBFYBXZJZFCreateAction extends BaseBean implements Action {
 		String requestid = request.getRequestid();
 		String src = request.getRequestManager().getSrc();
 		if (!"submit".equals(src)) {
-			new weaver.general.BaseBean().writeLog("股份公司-通用费用报销-资金支付-创建退回操作，不执行接口.");
+			new BaseBean().writeLog("股份公司-通用费用报销-资金支付-创建退回操作，不执行接口.");
 			return SUCCESS;
 		}
 		// 单据类型-值
@@ -82,7 +84,7 @@ public class JTYBFYBXZJZFCreateAction extends BaseBean implements Action {
 		// 货币码-值
 		String hbm_value = "";
 		// 货币码-字段
-		String hbm_column = "hbm";
+		String hbm_column = "hbms";
 		// 付款日期-值
 		String fkrq_value = "";
 		// 付款日期-字段
@@ -172,6 +174,10 @@ public class JTYBFYBXZJZFCreateAction extends BaseBean implements Action {
 		// 一次供应商编码
 		String ycxgysbm_column = "ycxgysbm";
 		String ycxgysbm_value = "";
+		String KURSF_column = "KURSF";
+		String KURSF_value = "";
+		String SQJE_BWB_column = "SQJE_BWB";
+		String SQJE_BWB_value = "";
 
 		Property[] properties = request.getMainTableInfo().getProperty();// 获取表单主字段信息
 		for (int i = 0; i < properties.length; i++) {
@@ -311,7 +317,12 @@ public class JTYBFYBXZJZFCreateAction extends BaseBean implements Action {
 			if (name.equals(ycxgysbm_column)) {
 				ycxgysbm_value = value;
 			}
-			
+			if (name.equals(KURSF_column)) {
+				KURSF_value = value;
+			}
+			if (name.equals(SQJE_BWB_column)) {
+				SQJE_BWB_value = value;
+			}
 		}
 		
 		writeLog("付款方行号"+fkflhh_value);
@@ -382,7 +393,19 @@ public class JTYBFYBXZJZFCreateAction extends BaseBean implements Action {
 				}
 				linf = ygbh_value;
 			}
-			if (zflb_value.equals("1")) {//对公非一次性供应商
+			if (zflb_value.equals("1") && !hbm_value.equals("RMB")) {//对公非一次性供应商
+				TR_TYPE_VALUE = "C";
+				RECE_ACC_NAME_VALUE = khgys_value;
+				RECE_CNAPS_VALUE = gyskhh_value;
+				RECE_ACC_NO_VALUE = gyszh_value;
+				if(gyszhz_value.equals("GX10") || gyszhz_value.equals("GX11")) {
+					qtyfkgr = qtyfkjtnb_value;
+				} else {
+					qtyfkgr = qtyfkjtwb_value;
+				}
+				linf = gysbm_value;
+			}
+			if (zflb_value.equals("1") && hbm_value.equals("RMB")) {//对公非一次性供应商
 				TR_TYPE_VALUE = dgzffs_value;
 				RECE_ACC_NAME_VALUE = khgys_value;
 				RECE_CNAPS_VALUE = gyskhh_value;
@@ -405,15 +428,15 @@ public class JTYBFYBXZJZFCreateAction extends BaseBean implements Action {
 			if (zflb_value.equals("2")) {//不需支付
 				return SUCCESS;
 			}
-			List<JTCLFBXZJZFCreate_HeadModel> hEAD = new ArrayList<JTCLFBXZJZFCreate_HeadModel>();
-			JTCLFBXZJZFCreate_HeadModel model = new JTCLFBXZJZFCreate_HeadModel(djlx_value, gsdm_value, cn_value,
+			List<JTCLFBXZJZFCreate_HeadModel2> hEAD = new ArrayList<JTCLFBXZJZFCreate_HeadModel2>();
+			JTCLFBXZJZFCreate_HeadModel2 model = new JTCLFBXZJZFCreate_HeadModel2(djlx_value, gsdm_value, cn_value,
 					kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, linf, qtyfkgr, sqrq_value, jbr_value,
-					sqje_value, hbm_value, fkrq_value, TR_TYPE_VALUE, RECE_ACC_NAME_VALUE, RECE_CNAPS_VALUE,
+					sqje_value, hbm_value, KURSF_value,SQJE_BWB_value, fkrq_value, TR_TYPE_VALUE, RECE_ACC_NAME_VALUE, RECE_CNAPS_VALUE,
 					RECE_ACC_NO_VALUE, zjysm_value, "(付款)" + zy_value,zs_value,fkflhh_value,fkfyhzh_value);
 			hEAD.add(model);
-			JTCLFBXZJZFCreateModel head = new JTCLFBXZJZFCreateModel(hEAD);
+			JTCLFBXZJZFCreateModel2 head = new JTCLFBXZJZFCreateModel2(hEAD);
 			try {
-				xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFCreateModel.class);
+				xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFCreateModel2.class);
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}

@@ -269,7 +269,9 @@ public class GYSSearchForCw {
                     jo.put("zczb", zczb);
                     jo.put("qgzzjgdm", qgzzjgdm);
                     jo.put("update_value", update_value);
-                    jo.put("jsondata", gysqc_value + ";" + gysbh_value + ";" + zhz_value);
+//                    jo.put("jsondata", gysqc_value + ";" + gysbh_value + ";" + zhz_value);
+                    String datajson = Util.spacetoHtml(gysqc_value + ";" + gysbh_value + ";" + zhz_value);
+                    jo.put("jsondata", datajson);//银行账号
                     data.add(jo);
                 }
                 return data;
@@ -356,7 +358,11 @@ public class GYSSearchForCw {
                     			e.printStackTrace();
                     		}
                             ob.put("bankname", lhhname);//银行账号
-                            ob.put("datajson", banks_value + ";" + bankaccount + ";" + lhhname);//银行账号
+
+                            String datajson = Util.spacetoHtml(banks_value + ";" + bankaccount + ";" + lhhname);
+                            ob.put("datajson", datajson);//银行账号
+//                            String datajson = banks_value + ";" + bankaccount + ";" + lhhname;
+//                            ob.put("datajson", datajson);//银行账号
                             //ob.put("datajson",banks_value + ";" + bankaccount);//银行账号
                             data.add(ob);
                         }
