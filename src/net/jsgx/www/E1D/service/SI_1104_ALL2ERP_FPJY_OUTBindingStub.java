@@ -7,7 +7,7 @@
 
 package net.jsgx.www.E1D.service;
 
-public class SI_1104_ALL2ERP_FPJY_OUTBindingStub extends org.apache.axis.client.Stub implements net.jsgx.www.E1D.service.SI_1104_ALL2ERP_FPJY_OUT {
+public class SI_1104_ALL2ERP_FPJY_OUTBindingStub extends org.apache.axis.client.Stub implements SI_1104_ALL2ERP_FPJY_OUT {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
     private java.util.Vector cachedSerFactories = new java.util.Vector();
@@ -25,10 +25,10 @@ public class SI_1104_ALL2ERP_FPJY_OUTBindingStub extends org.apache.axis.client.
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("SI_1104_ALL2ERP_FPJY_OUT");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "MT_1104_ALL2ERP_FPJY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "DT_1104_ALL2ERP_FPJY"), net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "MT_1104_ALL2ERP_FPJY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "DT_1104_ALL2ERP_FPJY"), DT_1104_ALL2ERP_FPJY.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "DT_1104_ALL2ERP_FPJY_RETURN"));
-        oper.setReturnClass(net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY_RETURN.class);
+        oper.setReturnClass(DT_1104_ALL2ERP_FPJY_RETURN.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "MT_1104_ALL2ERP_FPJY_RETURN"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
@@ -67,14 +67,14 @@ public class SI_1104_ALL2ERP_FPJY_OUTBindingStub extends org.apache.axis.client.
             Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
             qName = new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "DT_1104_ALL2ERP_FPJY");
             cachedSerQNames.add(qName);
-            cls = net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY.class;
+            cls = DT_1104_ALL2ERP_FPJY.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://www.jsgx.net/E1D/service", "DT_1104_ALL2ERP_FPJY_RETURN");
             cachedSerQNames.add(qName);
-            cls = net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY_RETURN.class;
+            cls = DT_1104_ALL2ERP_FPJY_RETURN.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -145,7 +145,7 @@ public class SI_1104_ALL2ERP_FPJY_OUTBindingStub extends org.apache.axis.client.
         }
     }
 
-    public net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY_RETURN SI_1104_ALL2ERP_FPJY_OUT(net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY MT_1104_ALL2ERP_FPJY) throws java.rmi.RemoteException {
+    public DT_1104_ALL2ERP_FPJY_RETURN SI_1104_ALL2ERP_FPJY_OUT(DT_1104_ALL2ERP_FPJY MT_1104_ALL2ERP_FPJY) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -158,8 +158,10 @@ public class SI_1104_ALL2ERP_FPJY_OUTBindingStub extends org.apache.axis.client.
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "SI_1104_ALL2ERP_FPJY_OUT"));
+        
         _call.setUsername("pi_consumer_oa");
         _call.setPassword("5>Y/H9YU=H/MJhv\\8tMac");
+        
         setRequestHeaders(_call);
         setAttachments(_call);
  try {        Object _resp = _call.invoke(new Object[] {MT_1104_ALL2ERP_FPJY});
@@ -170,9 +172,9 @@ public class SI_1104_ALL2ERP_FPJY_OUTBindingStub extends org.apache.axis.client.
         else {
             extractAttachments(_call);
             try {
-                return (net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY_RETURN) _resp;
+                return (DT_1104_ALL2ERP_FPJY_RETURN) _resp;
             } catch (Exception _exception) {
-                return (net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY_RETURN) org.apache.axis.utils.JavaUtils.convert(_resp, net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY_RETURN.class);
+                return (DT_1104_ALL2ERP_FPJY_RETURN) org.apache.axis.utils.JavaUtils.convert(_resp, DT_1104_ALL2ERP_FPJY_RETURN.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

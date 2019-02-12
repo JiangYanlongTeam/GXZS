@@ -16,7 +16,9 @@ import weaver.general.Util;
 import weaver.hrm.resource.ResourceComInfo;
 import weaver.interfaces.gx.jyl.cw.base.CWPublicMethod;
 import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreateModel;
+import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreateModel2;
 import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreate_HeadModel;
+import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXZJZFCreate_HeadModel2;
 import weaver.interfaces.gx.jyl.util.XMLUtil;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.Property;
@@ -131,8 +133,10 @@ public class DGFKZJZFCreateAction extends BaseBean implements Action {
 		String dgfklx_column = "dgfklx";
 		String dgfklx_value = "";
 
-		String qtyfkqt_column = "qtyfkqt";
-		String qtyfkqt_value = "";
+		String KURSF_column = "KURSF";
+		String KURSF_value = "";
+		String SQJE_BWB_column = "SQJE_BWB";
+		String SQJE_BWB_value = "";
 
 		Property[] properties = request.getMainTableInfo().getProperty();// 获取表单主字段信息
 		for (int i = 0; i < properties.length; i++) {
@@ -229,8 +233,11 @@ public class DGFKZJZFCreateAction extends BaseBean implements Action {
 			if (name.equals(dgfklx_column)) {
 				dgfklx_value = value;
 			}
-			if (name.equals(qtyfkqt_column)) {
-				qtyfkqt_value = value;
+			if (name.equals(KURSF_column)) {
+				KURSF_value = value;
+			}
+			if (name.equals(SQJE_BWB_column)) {
+				SQJE_BWB_value = value;
 			}
 		}
 		writeLog("付款方帐号:"+fkflhh_value);
@@ -275,27 +282,21 @@ public class DGFKZJZFCreateAction extends BaseBean implements Action {
 		if("1".equals(dgfklx_value)) {
 			qtyfzk = "2241040000";
 		}
-		String stype = "";
-		if("0".equals(zffs_value)) {
-			stype = "T";
-		}
-		if("1".equals(zffs_value)) {
-			stype = "E";
-		}
-		if("2".equals(zffs_value)) {
-			stype = "C";
-		}
+		List<JTCLFBXZJZFCreate_HeadModel2> hEAD = new ArrayList<JTCLFBXZJZFCreate_HeadModel2>();
+//		JTCLFBXZJZFCreate_HeadModel model = new JTCLFBXZJZFCreate_HeadModel(djlx_value, gsdm_value, cn_value,
+//				kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value, qtyfzk, sqrq_value,
+//				jbr_value, sqje_value, hbm_value, fkrq_value, "T", gysmc_value, gyskhh_value,
+//				gyskhzh_value, zjysm_value, "(付款)" + zy_value, fjzs_value,fkflhh_value,fkfyhzh_value);
 
+		JTCLFBXZJZFCreate_HeadModel2 model = new JTCLFBXZJZFCreate_HeadModel2(djlx_value, gsdm_value, cn_value,
+				kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value, qtyfzk, sqrq_value, jbr_value,
+				sqje_value, hbm_value, KURSF_value,SQJE_BWB_value, fkrq_value, "T", gysmc_value, gyskhh_value,
+				gyskhzh_value, zjysm_value, "(付款)" + zy_value,fjzs_value,fkflhh_value,fkfyhzh_value);
 
-		List<JTCLFBXZJZFCreate_HeadModel> hEAD = new ArrayList<JTCLFBXZJZFCreate_HeadModel>();
-		JTCLFBXZJZFCreate_HeadModel model = new JTCLFBXZJZFCreate_HeadModel(djlx_value, gsdm_value, cn_value,
-				kjqj_value, cbzx_value, zjzypzbh_value, yssqh_value, fklx_value, gysbm_value, qtyfkqt_value, sqrq_value,
-				jbr_value, sqje_value, hbm_value, fkrq_value, stype, gysmc_value, gyskhh_value,
-				gyskhzh_value, zjysm_value, "(付款)" + zy_value, fjzs_value,fkflhh_value,fkfyhzh_value);
 		hEAD.add(model);
-		JTCLFBXZJZFCreateModel head = new JTCLFBXZJZFCreateModel(hEAD);
+		JTCLFBXZJZFCreateModel2 head = new JTCLFBXZJZFCreateModel2(hEAD);
 		try {
-			xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFCreateModel.class);
+			xmlstring = XMLUtil.beanToXml(head, JTCLFBXZJZFCreateModel2.class);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}

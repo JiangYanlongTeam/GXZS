@@ -24,6 +24,8 @@
         <option value="2">呵呵</option>
         <option value="3">嘿嘿</option>
     </select>
+    <input id="test" name="test">
+    <button value="测试" onclick="test1()"></button>
 </div>
 </body>
 <script>
@@ -42,5 +44,17 @@
     $(".select2_select").select2({
         templateSelection: formatState
     });
+
+    function test1() {
+        var val = $("#test").val();
+        var regexp = /^(^[0-9])$/;
+        if(regexp.test(val)) {
+            alert("包含大小写字母");
+        } else {
+            alert("不包含大小写字母");
+        }
+
+    }
+
 </script>
 </html>

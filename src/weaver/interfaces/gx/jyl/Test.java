@@ -1,8 +1,12 @@
 package weaver.interfaces.gx.jyl;
 
 import weaver.conn.RecordSet;
+import weaver.general.StaticObj;
 import weaver.general.Util;
 import weaver.hrm.User;
+import weaver.hrm.company.SubCompanyComInfo;
+import weaver.interfaces.workflow.browser.BaseBrowser;
+import weaver.interfaces.workflow.browser.Browser;
 import weaver.workflow.webservices.WorkflowService;
 import weaver.workflow.webservices.WorkflowServiceImpl;
 
@@ -40,10 +44,10 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-        System.out.println(simpleDateFormat.format(new Date()));
+        BaseBrowser browser = new BaseBrowser();
+        browser.search("","",null);
+        StaticObj.getServiceByFullname("browser.cs_wbs", Browser.class);
 
-        WorkflowService workflowService = new WorkflowServiceImpl();
 
 
     }

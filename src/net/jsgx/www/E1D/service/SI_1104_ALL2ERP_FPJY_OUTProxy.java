@@ -1,8 +1,8 @@
 package net.jsgx.www.E1D.service;
 
-public class SI_1104_ALL2ERP_FPJY_OUTProxy implements net.jsgx.www.E1D.service.SI_1104_ALL2ERP_FPJY_OUT {
+public class SI_1104_ALL2ERP_FPJY_OUTProxy implements SI_1104_ALL2ERP_FPJY_OUT {
   private String _endpoint = null;
-  private net.jsgx.www.E1D.service.SI_1104_ALL2ERP_FPJY_OUT sI_1104_ALL2ERP_FPJY_OUT = null;
+  private SI_1104_ALL2ERP_FPJY_OUT sI_1104_ALL2ERP_FPJY_OUT = null;
   
   public SI_1104_ALL2ERP_FPJY_OUTProxy() {
     _initSI_1104_ALL2ERP_FPJY_OUTProxy();
@@ -15,7 +15,7 @@ public class SI_1104_ALL2ERP_FPJY_OUTProxy implements net.jsgx.www.E1D.service.S
   
   private void _initSI_1104_ALL2ERP_FPJY_OUTProxy() {
     try {
-      sI_1104_ALL2ERP_FPJY_OUT = (new net.jsgx.www.E1D.service.SI_1104_ALL2ERP_FPJY_OUTServiceLocator()).getHTTPS_Port();
+      sI_1104_ALL2ERP_FPJY_OUT = (new SI_1104_ALL2ERP_FPJY_OUTServiceLocator()).getHTTPS_Port();
       if (sI_1104_ALL2ERP_FPJY_OUT != null) {
         if (_endpoint != null)
           ((javax.xml.rpc.Stub)sI_1104_ALL2ERP_FPJY_OUT)._setProperty("javax.xml.rpc.service.endpoint.address", _endpoint);
@@ -38,13 +38,13 @@ public class SI_1104_ALL2ERP_FPJY_OUTProxy implements net.jsgx.www.E1D.service.S
     
   }
   
-  public net.jsgx.www.E1D.service.SI_1104_ALL2ERP_FPJY_OUT getSI_1104_ALL2ERP_FPJY_OUT() {
+  public SI_1104_ALL2ERP_FPJY_OUT getSI_1104_ALL2ERP_FPJY_OUT() {
     if (sI_1104_ALL2ERP_FPJY_OUT == null)
       _initSI_1104_ALL2ERP_FPJY_OUTProxy();
     return sI_1104_ALL2ERP_FPJY_OUT;
   }
   
-  public DT_1104_ALL2ERP_FPJY_RETURN SI_1104_ALL2ERP_FPJY_OUT(net.jsgx.www.E1D.service.DT_1104_ALL2ERP_FPJY MT_1104_ALL2ERP_FPJY) throws java.rmi.RemoteException{
+  public DT_1104_ALL2ERP_FPJY_RETURN SI_1104_ALL2ERP_FPJY_OUT(DT_1104_ALL2ERP_FPJY MT_1104_ALL2ERP_FPJY) throws java.rmi.RemoteException{
     if (sI_1104_ALL2ERP_FPJY_OUT == null)
       _initSI_1104_ALL2ERP_FPJY_OUTProxy();
     return sI_1104_ALL2ERP_FPJY_OUT.SI_1104_ALL2ERP_FPJY_OUT(MT_1104_ALL2ERP_FPJY);

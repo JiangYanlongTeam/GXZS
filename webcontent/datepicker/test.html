@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+        //用div的样式代替select的样式
+        width: 200px;
+            height: 40px;
+            border-radius: 5px;
+        box-shadow: 0 0 5px #ccc;
+            position: relative;
+        }
+        select{
+        //清除select的边框样式
+        border: none;
+        //清除select聚焦时候的边框颜色
+        outline: none;
+        //将select的宽高等于div的宽高
+        width: 100%;
+            height: 40px;
+            line-height: 40px;
+        //隐藏select的下拉图标
+        appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        //通过padding-left的值让文字居中
+        padding-left: 60px;
+        }
+          div:after{
+              content: "";
+              width: 14px;
+              height: 8px;
+              background: url(img/xiala.png) no-repeat center;
+          //通过定位将图标放在合适的位置
+          position: absolute;
+              right: 20px;
+              top: 45%;
+          //给自定义的图标实现点击下来功能
+          pointer-events: none;
+          }
+
+    </style>
+    <script src="layDate-v5.0.9/laydate/laydate.js"></script> <!-- 改成你的路径 -->
+</head>
+<body>
+    <input type="text" id="test1">
+    <div>
+        <select name="">
+            <option value="芝士">芝士</option>
+            <option value="奶油">奶油</option>
+        </select>
+    </div>
+</body>
+<script>
+    //开启公历节日
+    laydate.render({
+        elem: '#test1'
+        ,calendar: true
+        ,done: function(value, date, endDate){
+            console.log(value); //得到日期生成的值，如：2017-08-18
+            console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+            console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+        }
+    });
+</script>
+</html>

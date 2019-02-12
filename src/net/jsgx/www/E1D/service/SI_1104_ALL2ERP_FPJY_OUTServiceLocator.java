@@ -22,7 +22,7 @@ public class SI_1104_ALL2ERP_FPJY_OUTServiceLocator extends org.apache.axis.clie
     }
 
     // Use to get a proxy class for HTTPS_Port
-    private String HTTPS_Port_address = "http://jsgxpod:50000/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BS_OA&amp;receiverParty=&amp;receiverService=&amp;interface=SI_1104_ALL2ERP_FPJY_OUT&amp;interfaceNamespace=http%3A%2F%2Fwww.jsgx.net%2FE1D%2Fservice";
+    private String HTTPS_Port_address = "http://jsgxpopscs:8000/XISOAPAdapter/MessageServlet?senderParty=&senderService=BS_OA&receiverParty=&receiverService=&interface=SI_1104_ALL2ERP_FPJY_OUT&interfaceNamespace=http://www.jsgx.net/E1D/service";
 
     public String getHTTPS_PortAddress() {
         return HTTPS_Port_address;
@@ -67,7 +67,7 @@ public class SI_1104_ALL2ERP_FPJY_OUTServiceLocator extends org.apache.axis.clie
 
 
     // Use to get a proxy class for HTTP_Port
-    private String HTTP_Port_address = "http://jsgxpod:50000/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BS_OA&amp;receiverParty=&amp;receiverService=&amp;interface=SI_1104_ALL2ERP_FPJY_OUT&amp;interfaceNamespace=http%3A%2F%2Fwww.jsgx.net%2FE1D%2Fservice";
+    private String HTTP_Port_address = "http://jsgxpopscs:8000/XISOAPAdapter/MessageServlet?senderParty=&senderService=BS_OA&receiverParty=&receiverService=&interface=SI_1104_ALL2ERP_FPJY_OUT&interfaceNamespace=http://www.jsgx.net/E1D/service";
 
     public String getHTTP_PortAddress() {
         return HTTP_Port_address;
