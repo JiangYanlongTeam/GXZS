@@ -94,12 +94,17 @@
     var js_nodeid = "<%=nodeid%>";
     var fysqlb_val = "";
     var js_object = [
-            {
-                "workflowid":"12282",
-                "nodeid":"29838",
-                "fysplb":"21"
-            }
-        ];
+        {
+            "workflowid":"12282",
+            "nodeid":"29838",
+            "fysplb":"21"
+        },
+        {
+            "workflowid":"10881",
+            "nodeid":"29441",
+            "fysplb":"19"
+        }
+    ];
     for(var i = 0 ; i < js_object.length; i++) {
         var js_o = js_object[i];
         var nodeid = js_o.nodeid;
@@ -115,7 +120,7 @@
     jQuery(document).ready(function () {
 
         if (isNode) {
-            jQuery("<input type=\"button\" onclick=\"openDialogForCw('tyfy_pzyl','通用费用凭证预览')\" value=\"凭证预览\" class=\"e8_btn_top\">").appendTo(jQuery("#pzyl"));
+            jQuery("<input type=\"button\" onclick=\"openDialogForCw('extension_tyfy','通用费用凭证预览')\" value=\"凭证预览\" class=\"e8_btn_top\">").appendTo(jQuery("#pzyl"));
         }
         if ('<%=nodetype%>' == '0') {//for submitting common expense, apply node
             jQuery("#field<%=gysmcid%>").attr("readonly", "readonly");

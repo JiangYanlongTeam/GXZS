@@ -132,6 +132,17 @@
             "workflowid": "12269",
             "nodeid": "29806",
             "fysplb": ""
+        },
+        {
+            "workflowid": "10901",
+            "nodeid": "29461",
+            "fysplb": ""
+        }
+        ,
+        {
+            "workflowid": "新增公司费用报销workfkowid",
+            "nodeid": "对应流程凭证预览节点nodeid",
+            "fysplb": ""
         }
     ];
     for (var i = 0; i < js_object.length; i++) {
@@ -148,7 +159,7 @@
     //页面加载绑定事件
     jQuery(document).ready(function () {
         if (isNode) {
-            jQuery("<input type=\"button\" onclick=\"openDialogForCw('clf_pzyl','差旅费凭证预览')\" value=\"凭证预览\" class=\"e8_btn_top\">").appendTo(jQuery("#pzyl"));
+            jQuery("<input type=\"button\" onclick=\"openDialogForCw('extension_clf','差旅费凭证预览')\" value=\"凭证预览\" class=\"e8_btn_top\">").appendTo(jQuery("#pzyl"));
         }
         if ('<%=nodetype%>' == '0') {//for travel expense,apply node
             jQuery("#field<%=gysmcid%>").attr("readonly", "readonly");

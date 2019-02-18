@@ -274,7 +274,7 @@ public class YBFYBXCreateAction_3020 extends BaseBean implements Action {
 		
 
 		boolean exist = false;
-		String cpsql = "select * from formtable_main_1285 where zt='0' and mc like '%挂车牌%' and id = "+fylx_value+"";
+		String cpsql = "select * from uf_fybxlb where zt='0' and lb='1' and ifxm = '1' and id = "+fylx_value+"";
 		RecordSet recordSet = new RecordSet();
 		recordSet.execute(cpsql);
 		if(recordSet.next()) {

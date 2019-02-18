@@ -1,4 +1,4 @@
-package weaver.interfaces.gx.jyl.extension.xtgj.clf;
+package weaver.interfaces.gx.jyl.extension.stgj.clf;
 
 import net.jsgx.www.E1D.service.DT_1049_ALL2ERP_ZJZFSQ;
 import net.jsgx.www.E1D.service.DT_1049_ALL2ERP_ZJZFSQ_RETURN;
@@ -364,7 +364,7 @@ public class CLFZJZFCreateAction_4000 extends BaseBean implements Action {
 							skrzh_value, zjysm_value, "(付款)" + zy_value, fjzs_value,fkflhh_value,fkfyhzh_value);
 					hEAD.add(model);
 				}
-				
+
 				JTFYBX_CLFZJZFCreateModel head = new JTFYBX_CLFZJZFCreateModel(hEAD);
 				try {
 					xmlstring = XMLUtil.beanToXml(head, JTFYBX_CLFZJZFCreateModel.class);

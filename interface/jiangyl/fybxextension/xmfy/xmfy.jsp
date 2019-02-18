@@ -129,8 +129,8 @@
     var fysqlb_val = "";
     var js_object = [
         {
-            "workflowid": "10842",
-            "nodeid": "26017",
+            "workflowid": "12681",
+            "nodeid": "30708",
             "fysplb": ""
         }
     ];
@@ -148,7 +148,7 @@
     //页面加载绑定事件
     jQuery(document).ready(function () {
         if (isNode) {
-            jQuery("<input type=\"button\" onclick=\"openDialogForCw('tyfy_pzyl2','通用费用凭证预览')\" value=\"凭证预览\" class=\"e8_btn_top\">").appendTo(jQuery("#pzyl"));
+            jQuery("<input type=\"button\" onclick=\"openDialogForCw('extension_xmfy','通用费用凭证预览')\" value=\"凭证预览\" class=\"e8_btn_top\">").appendTo(jQuery("#pzyl"));
         }
         if ('<%=nodetype%>' == '0') {
             jQuery("#field<%=gysmcid%>").attr("readonly", "readonly");
@@ -261,5 +261,6 @@
                 return false;
             }
         }
+        return true;
     };
 </script>

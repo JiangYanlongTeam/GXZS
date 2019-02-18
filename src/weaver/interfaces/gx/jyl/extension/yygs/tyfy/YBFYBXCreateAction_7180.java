@@ -8,9 +8,9 @@ import weaver.general.BaseBean;
 import weaver.general.Util;
 import weaver.hrm.resource.ResourceComInfo;
 import weaver.interfaces.gx.jyl.cw.base.CWPublicMethod;
-import weaver.interfaces.gx.jyl.extension.tzgl.Mode.JTFYBX_YBFYBXCreateModel;
+import weaver.interfaces.gx.jyl.extension.tzgl.Mode.JTFYBX_YBFYBXCreateModel_YYGS;
 import weaver.interfaces.gx.jyl.extension.tzgl.Mode.JTFYBX_YBFYBXCreate_HeadModel;
-import weaver.interfaces.gx.jyl.extension.tzgl.Mode.JTFYBX_YBFYBXCreate_ItemModel;
+import weaver.interfaces.gx.jyl.extension.tzgl.Mode.JTFYBX_YBFYBXCreate_ItemModel_YYGS;
 import weaver.interfaces.gx.jyl.gfgs.model.JTCLFBXCreate_ItemModel;
 import weaver.interfaces.gx.jyl.util.XMLUtil;
 import weaver.interfaces.workflow.action.Action;
@@ -285,6 +285,8 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 		if(headZY.length() > 25) {
 			headZY = headZY.substring(0, 25);
 		}
+
+		String fzhs1 = "";
 		
 		// 此场景条件：报销方式为“直接报销”
 		if ("2".equals(bxfs_value)) {
@@ -295,13 +297,15 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 				JTFYBX_YBFYBXCreate_HeadModel headermodel = new JTFYBX_YBFYBXCreate_HeadModel(gsdm_value, pzlx_value, pzrq_value,
 						gzrq_value, headZY, ckpzbh_value, hbm_value, "", pzzdr_value, "OA系统",fjzs_value);
 				headlist.add(headermodel);
-				List<JTFYBX_YBFYBXCreate_ItemModel> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel>();
+				List<JTFYBX_YBFYBXCreate_ItemModel_YYGS> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel_YYGS>();
 				RecordSet rs = new RecordSet();
-				String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.cph from " + tablename + " a," + tablename
+				String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.cph,b.fzhs1,b.fzhs2 from " + tablename + " a," + tablename
 						+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 				rs.execute(sql);
 				while (rs.next()) {
 					String yskm_value = Util.null2o(rs.getString("yskm"));
+					fzhs1 = Util.null2o(rs.getString("fzhs1"));
+					String fzhs2 = Util.null2o(rs.getString("fzhs2"));
 					String bxjes_value = Util.null2o(rs.getString("bxje"));
 					String se_value = Util.null2o(rs.getString("se"));
 					String jxskm_value = Util.null2o(rs.getString("jxskm"));
@@ -317,18 +321,15 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 						AUFNR_VALUE = gsxm_value;
 					}
 
+					JTFYBX_YBFYBXCreate_ItemModel_YYGS line = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", yskm_value, "", "", sl_value,
+							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "","");
+					lines.add(line);
 					if ("0".equals(sfzp_value)) {
-						JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
-								df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-						lines.add(line);
+
 						// 稅不带成本中心
-						JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("S", jxskm_value, "", "",
-								sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUE, "", "");
+						JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", jxskm_value, "", "",
+								sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUE, "", "",fzhs2);
 						lines.add(line2);
-					} else {
-						JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", "",
-								df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-						lines.add(line);
 					}
 				}
 				String AUFNR_VALUES2 = "";
@@ -338,12 +339,12 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 					AUFNR_VALUES2 = gsxm_value;
 				}
 				//贷方没有成本中心
-				JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("H", qtyfkgr_value, ygbh_value, "", "",
-						bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "");
+				JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("H", qtyfkgr_value, ygbh_value, "", "",
+						bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "",fzhs1);
 				lines.add(line2);
-				JTFYBX_YBFYBXCreateModel model = new JTFYBX_YBFYBXCreateModel(headlist, lines);
+				JTFYBX_YBFYBXCreateModel_YYGS model = new JTFYBX_YBFYBXCreateModel_YYGS(headlist, lines);
 				try {
-					xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel.class);
+					xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel_YYGS.class);
 				} catch (JAXBException e) {
 					e.printStackTrace();
 				}
@@ -385,13 +386,15 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 				JTFYBX_YBFYBXCreate_HeadModel headermodel = new JTFYBX_YBFYBXCreate_HeadModel(gsdm_value, pzlx_value, pzrq_value,
 						gzrq_value, headZY, ckpzbh_value, hbm_value, "", pzzdr_value, "OA系统",fjzs_value);
 				headlist.add(headermodel);
-				List<JTFYBX_YBFYBXCreate_ItemModel> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel>();
+				List<JTFYBX_YBFYBXCreate_ItemModel_YYGS> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel_YYGS>();
 				RecordSet rs = new RecordSet();
-				String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.cph from " + tablename + " a," + tablename
+				String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.cph,b.fzhs1,b.fzhs2 from " + tablename + " a," + tablename
 						+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 				rs.execute(sql);
 				while (rs.next()) {
 					String yskm_value = Util.null2o(rs.getString("yskm"));
+					fzhs1 = Util.null2o(rs.getString("fzhs1"));
+					String fzhs2 = Util.null2o(rs.getString("fzhs2"));
 					String bxjes_value = Util.null2o(rs.getString("bxje"));
 					String se_value = Util.null2o(rs.getString("se"));
 					String jxskm_value = Util.null2o(rs.getString("jxskm"));
@@ -406,23 +409,20 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 					} else {
 						AUFNR_VALUE = gsxm_value;
 					}
+					JTFYBX_YBFYBXCreate_ItemModel_YYGS line = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", yskm_value, "", "", sl_value,
+							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "","");
+					lines.add(line);
 					if ("0".equals(sfzp_value)) {
-						JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
-								df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-						lines.add(line);
+
 						String AUFNR_VALUES = "";
 						if (exist) {
 							AUFNR_VALUES = "";
 						} else {
 							AUFNR_VALUES = gsxm_value;
 						}
-						JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("S", jxskm_value, "", "",
-								sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "");
+						JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", jxskm_value, "", "",
+								sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "",fzhs2);
 						lines.add(line2);
-					} else {
-						JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", "",
-								df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-						lines.add(line);
 					}
 				}
 				String AUFNR_VALUES2 = "";
@@ -434,25 +434,25 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 				// 判断是否是一次性供应商 3 ： 一次性供应商
 				if ("3".equals(zflb_value)) {
 					// 传一次性供应商 供应商编码
-					JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("H", qtyfkjtwb_value, ycxgysbm_value, ycxgysmc_value, "",
-							bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "");
+					JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("H", qtyfkjtwb_value, ycxgysbm_value, ycxgysmc_value, "",
+							bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "",fzhs1);
 					lines.add(line2);
 				} else {
 					// 不是一次性供应商  判断是否是内部供应商
 					if ("GX10".equals(gyszhz_value) || "GX11".equals(gyszhz_value)) {
-						JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("H", qtyfkjtnb_value, gysbm_value, "", "",
-								bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "");
+						JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("H", qtyfkjtnb_value, gysbm_value, "", "",
+								bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "",fzhs1);
 						lines.add(line2);
 					} else {
-						JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("H", qtyfkjtwb_value, gysbm_value, "", "",
-								bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "");
+						JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("H", qtyfkjtwb_value, gysbm_value, "", "",
+								bxje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "",fzhs1);
 						lines.add(line2);
 					}
 				}
 				
-				JTFYBX_YBFYBXCreateModel model = new JTFYBX_YBFYBXCreateModel(headlist, lines);
+				JTFYBX_YBFYBXCreateModel_YYGS model = new JTFYBX_YBFYBXCreateModel_YYGS(headlist, lines);
 				try {
-					xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel.class);
+					xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel_YYGS.class);
 				} catch (JAXBException e) {
 					e.printStackTrace();
 				}
@@ -495,14 +495,16 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 			JTFYBX_YBFYBXCreate_HeadModel headermodel = new JTFYBX_YBFYBXCreate_HeadModel(gsdm_value, pzlx_value, pzrq_value,
 					gzrq_value, headZY, ckpzbh_value, hbm_value, "", pzzdr_value, "OA系统",fjzs_value);
 			headlist.add(headermodel);
-			List<JTFYBX_YBFYBXCreate_ItemModel> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel>();
+			List<JTFYBX_YBFYBXCreate_ItemModel_YYGS> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel_YYGS>();
 
 			RecordSet rs = new RecordSet();
-			String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx from " + tablename + " a," + tablename
+			String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.fzhs1,b.fzhs2 from " + tablename + " a," + tablename
 					+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 			rs.execute(sql);
 			while (rs.next()) {
 				String yskm_value = Util.null2o(rs.getString("yskm"));
+				fzhs1 = Util.null2o(rs.getString("fzhs1"));
+				String fzhs2 = Util.null2o(rs.getString("fzhs2"));
 				String bxjes_value = Util.null2o(rs.getString("bxje"));
 				String se_value = Util.null2o(rs.getString("se"));
 				String jxskm_value = Util.null2o(rs.getString("jxskm"));
@@ -518,11 +520,12 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 				} else {
 					AUFNR_VALUE = gsxm_value;
 				}
+
+				JTFYBX_YBFYBXCreate_ItemModel_YYGS line = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", yskm_value, "", "", sl_value,
+						df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "","");
+				lines.add(line);
+
 				if ("0".equals(sfzp_value)) {
-					JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
-							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-					lines.add(line);
-					
 					String AUFNR_VALUES = "";
 					if (exist) {
 						AUFNR_VALUES = "";
@@ -530,13 +533,9 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 						AUFNR_VALUES = gsxm_value;
 					}
 
-					JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("S", jxskm_value, "", "",
-							sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "");
+					JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", jxskm_value, "", "",
+							sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "",fzhs2);
 					lines.add(line2);
-				} else {
-					JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", "",
-							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-					lines.add(line);
 				}
 			}
 
@@ -555,12 +554,12 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 			rs.next();
 			String jkdh = Util.null2String(rs.getString("sqbh"));
 			writeLog("获取借款单号："+jkdh);
-			JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("H", qtyszk_value, ygbh_value, "", "",
-					cjkje_value, "", "(挂帐)" + zy_value, "", jkdh, "", AUFNR_VALUES2, "", "");
+			JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("H", qtyszk_value, ygbh_value, "", "",
+					cjkje_value, "", "(挂帐)" + zy_value, "", jkdh, "", AUFNR_VALUES2, "", "",fzhs1);
 			lines.add(line2);
-			JTFYBX_YBFYBXCreateModel model = new JTFYBX_YBFYBXCreateModel(headlist, lines);
+			JTFYBX_YBFYBXCreateModel_YYGS model = new JTFYBX_YBFYBXCreateModel_YYGS(headlist, lines);
 			try {
-				xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel.class);
+				xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel_YYGS.class);
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}
@@ -601,14 +600,16 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 			JTFYBX_YBFYBXCreate_HeadModel headermodel = new JTFYBX_YBFYBXCreate_HeadModel(gsdm_value, pzlx_value, pzrq_value,
 					gzrq_value, headZY, ckpzbh_value, hbm_value, "", pzzdr_value, "OA系统",fjzs_value);
 			headlist.add(headermodel);
-			List<JTFYBX_YBFYBXCreate_ItemModel> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel>();
+			List<JTFYBX_YBFYBXCreate_ItemModel_YYGS> lines = new ArrayList<JTFYBX_YBFYBXCreate_ItemModel_YYGS>();
 
 			RecordSet rs = new RecordSet();
-			String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx from " + tablename + " a," + tablename
+			String sql = "select b.yskm,b.jxskm,b.bxje,b.se,sfzp,b.sl,a.cbzx,b.fzhs1,b.fzhs2 from " + tablename + " a," + tablename
 					+ "_dt1 b where a.id = b.mainid and a.requestid = '" + requestid + "'";
 			rs.execute(sql);
 			while (rs.next()) {
 				String yskm_value = Util.null2o(rs.getString("yskm"));
+				fzhs1 = Util.null2o(rs.getString("fzhs1"));
+				String fzhs2 = Util.null2o(rs.getString("fzhs2"));
 				String bxjes_value = Util.null2o(rs.getString("bxje"));
 				String se_value = Util.null2o(rs.getString("se"));
 				String jxskm_value = Util.null2o(rs.getString("jxskm"));
@@ -624,10 +625,11 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 				} else {
 					AUFNR_VALUE = gsxm_value;
 				}
+				JTFYBX_YBFYBXCreate_ItemModel_YYGS line = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", yskm_value, "", "", sl_value,
+						df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "","");
+				lines.add(line);
 				if ("0".equals(sfzp_value)) {
-					JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", sl_value,
-							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-					lines.add(line);
+
 					String AUFNR_VALUES = "";
 					if (exist) {
 						AUFNR_VALUES = "";
@@ -635,13 +637,9 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 						AUFNR_VALUES = gsxm_value;
 					}
 
-					JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("S", jxskm_value, "", "",
-							sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "");
+					JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("S", jxskm_value, "", "",
+							sl_value, se_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES, "", "",fzhs2);
 					lines.add(line2);
-				} else {
-					JTFYBX_YBFYBXCreate_ItemModel line = new JTFYBX_YBFYBXCreate_ItemModel("S", yskm_value, "", "", "",
-							df.format(tol), "", "(挂帐)" + zy_value, "", ckpzbh_value, cbzx_value, AUFNR_VALUE, "", "");
-					lines.add(line);
 				}
 			}
 
@@ -661,15 +659,15 @@ public class YBFYBXCreateAction_7180 extends BaseBean implements Action {
 			String jkdh = Util.null2String(rs.getString("sqbh"));
 			writeLog("获取借款单号："+jkdh);
 			
-			JTFYBX_YBFYBXCreate_ItemModel line2 = new JTFYBX_YBFYBXCreate_ItemModel("H", qtyszk_value, ygbh_value, "", "",
-					cjkje_value, "", "(挂帐)" + zy_value, "", jkdh, "", AUFNR_VALUES2, "", "");//借款单
+			JTFYBX_YBFYBXCreate_ItemModel_YYGS line2 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("H", qtyszk_value, ygbh_value, "", "",
+					cjkje_value, "", "(挂帐)" + zy_value, "", jkdh, "", AUFNR_VALUES2, "", "",fzhs1);//借款单
 			lines.add(line2);
-			JTFYBX_YBFYBXCreate_ItemModel line3 = new JTFYBX_YBFYBXCreate_ItemModel("H", qtyfkgr_value, ygbh_value, "", "",
-					sbje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "");//系统OA单号
+			JTFYBX_YBFYBXCreate_ItemModel_YYGS line3 = new JTFYBX_YBFYBXCreate_ItemModel_YYGS("H", qtyfkgr_value, ygbh_value, "", "",
+					sbje_value, "", "(挂帐)" + zy_value, "", ckpzbh_value, "", AUFNR_VALUES2, "", "",fzhs1);//系统OA单号
 			lines.add(line3);
-			JTFYBX_YBFYBXCreateModel model = new JTFYBX_YBFYBXCreateModel(headlist, lines);
+			JTFYBX_YBFYBXCreateModel_YYGS model = new JTFYBX_YBFYBXCreateModel_YYGS(headlist, lines);
 			try {
-				xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel.class);
+				xmlstring = XMLUtil.beanToXml(model, JTFYBX_YBFYBXCreateModel_YYGS.class);
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}

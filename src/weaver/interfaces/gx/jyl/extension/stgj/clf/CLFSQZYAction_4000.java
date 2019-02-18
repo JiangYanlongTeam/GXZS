@@ -1,4 +1,4 @@
-package weaver.interfaces.gx.jyl.extension.xtgj.clf;
+package weaver.interfaces.gx.jyl.extension.stgj.clf;
 
 import net.jsgx.www.E1D.service.DT_1030_ALL2ERP_ZJYSZY;
 import net.jsgx.www.E1D.service.DT_1030_ALL2ERP_ZJYSZY_RETURN;

@@ -16,7 +16,7 @@
 
     // 判断节点是否 会计节点
     String showPreView = "0";
-    int[] nodeids = new int[]{29771}; // TODO 填写所有 还款申请流程 会计节点 nodeid
+    int[] nodeids = new int[]{29771,30072,30373,30524,29779,28115,29775}; // TODO 填写所有 还款申请流程 会计节点 nodeid
     for(int no : nodeids) {
         if(nodeid == no) {
             showPreView = "1";

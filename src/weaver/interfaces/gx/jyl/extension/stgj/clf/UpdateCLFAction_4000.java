@@ -1,4 +1,4 @@
-package weaver.interfaces.gx.jyl.extension.xtgj.clf;
+package weaver.interfaces.gx.jyl.extension.stgj.clf;
 
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;

@@ -34,8 +34,8 @@
     String dgzffs = fieldUtil.getlabelId("dgzffs",Integer.parseInt(formid_convert),"0","0");//对公支付方式
     String cph = fieldUtil.getlabelId("cph",Integer.parseInt(formid_convert),"1","1");//车牌号
     String fysplb = fieldUtil.getlabelId("fylb",Integer.parseInt(formid_convert),"0","0");//费用审批类别
-	String khhmc_value = fieldUtil.getlabelId("khh",Integer.parseInt(formid_convert),"0","0");//费用审批类别
-	String gyskhh_value = fieldUtil.getlabelId("gyskhh",Integer.parseInt(formid_convert),"0","0");//费用审批类别
+    String khhmc_value = fieldUtil.getlabelId("khh",Integer.parseInt(formid_convert),"0","0");//费用审批类别
+    String gyskhh_value = fieldUtil.getlabelId("gyskhh",Integer.parseInt(formid_convert),"0","0");//费用审批类别
     //For Getting Amount of Tax By Automatically ,jay
     String sl = fieldUtil.getlabelId("sl",Integer.parseInt(formid_convert),"1","1");//Rate Of Tax
     String se = fieldUtil.getlabelId("se",Integer.parseInt(formid_convert),"1","1");//Amount Of Tax
@@ -132,6 +132,11 @@
             "workflowid": "12349",
             "nodeid": "30013",
             "fysplb": ""
+        },
+        {
+            "workflowid": "9221",
+            "nodeid": "22327",
+            "fysplb": ""
         }
     ];
     for (var i = 0; i < js_object.length; i++) {
@@ -155,17 +160,17 @@
             jQuery("#field<%=gysbmid%>").attr("readonly", "readonly");
             jQuery("#field<%=gyszhzid%>").attr("readonly", "readonly");
             if (jQuery("#field<%=gysmcid%>").is(":hidden")) {
-				jQuery("#field<%=gysmcid%>span").text(jQuery("#field<%=gysmcid%>").val());
+                jQuery("#field<%=gysmcid%>span").text(jQuery("#field<%=gysmcid%>").val());
             } else {
                 jQuery("#field<%=gysmcid%>span").html("<img src='/wui/theme/ecology8/skins/default/general/browser_wev8.png' style='cursor:pointer;' onclick=\"getdata2()\" />");
             }
             jQuery("#field<%=lhhid%>").attr("readonly", "readonly");
             if (jQuery("#field<%=lhhid%>").is(":hidden")) {
-				jQuery("#field<%=lhhid%>span").text(jQuery("#field<%=lhhid%>").val());
+                jQuery("#field<%=lhhid%>span").text(jQuery("#field<%=lhhid%>").val());
             } else {
                 jQuery("#field<%=lhhid%>span").html("<img src='/wui/theme/ecology8/skins/default/general/browser_wev8.png' style='cursor:pointer;' onclick=\"getdata4()\" />");
             }
         }
-        
+
     });
 </script>
